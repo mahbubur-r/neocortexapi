@@ -160,7 +160,7 @@ namespace NeoCortexApiSample
             }
 
             // Learning process will take 1000 iterations (cycles)
-            int maxSPLearningCycles = 1000;
+            int maxSPLearningCycles = 10;
 
             for (int cycle = 0; cycle < maxSPLearningCycles; cycle++)
             {
