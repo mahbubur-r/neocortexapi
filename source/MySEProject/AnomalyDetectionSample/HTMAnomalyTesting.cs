@@ -23,6 +23,24 @@ namespace AnomalyDetectionSample
             // HTM model training initiated
             HTMModeltraining myModel = new HTMModeltraining();
             Predictor myPredictor;
+
+
+            myModel.RunHTMModelLearning(_trainingFolderPath, _predictingFolderPath, out myPredictor);
+
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("Started testing our trained HTM Engine...................");
+            Console.WriteLine();
+
+            // Starting to test our trained HTM model
+
+            // CSVFileReader can also be used in place of CSVFolderReader to read a single file
+            // We will take sequences from predicting folder
+            // After that, we will then trim those sequences: sequences where first few elements are removed, for anomaly detection
+            CSVFolderReader testseq = new CSVFolderReader(_predictingFolderPath);
+            var inputtestseq = testseq.ReadFolder();
+            var triminputtestseq = CSVFolderReader.TrimSequences(inputtestseq);
+            myPredictor.Reset();
         }
     }
 }
