@@ -41,6 +41,20 @@ namespace AnomalyDetectionSample
             var inputtestseq = testseq.ReadFolder();
             var triminputtestseq = CSVFolderReader.TrimSequences(inputtestseq);
             myPredictor.Reset();
+
+
+            foreach (List<double> list in triminputtestseq)
+            {
+                double[] lst = list.ToArray();
+                try
+                {
+                    DetectAnomaly(myPredictor, lst);
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"Exception caught: {ex.Message}");
+                }
+            }
         }
     }
 }
