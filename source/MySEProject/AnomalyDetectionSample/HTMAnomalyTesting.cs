@@ -64,5 +64,12 @@ namespace AnomalyDetectionSample
             Console.WriteLine();
             Console.WriteLine("------------------------------");
 }
+    private static void DetectAnomaly(Predictor predictor, double[] list)
+    {
+        if (list.Length < 2)
+        {
+            throw new ArgumentException($"List must contain at least two values. Actual count: {list.Length}. List: [{string.Join(",", list)}]");
+
+        }
     }
 }
