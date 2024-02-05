@@ -56,5 +56,13 @@ namespace AnomalyDetectionSample
                 }
             }
         }
+
+        Console.WriteLine();
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("Anomaly detection experiment complete!!.");
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
+}
     }
 }
