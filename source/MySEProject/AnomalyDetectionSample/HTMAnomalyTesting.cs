@@ -71,5 +71,11 @@ namespace AnomalyDetectionSample
             throw new ArgumentException($"List must contain at least two values. Actual count: {list.Length}. List: [{string.Join(",", list)}]");
 
         }
-    }
+        foreach (double value in list)
+        {
+            if (double.IsNaN(value))
+            {
+                throw new ArgumentException($"List contains non-numeric values. List: [{string.Join(",", list)}]");
+            }
+        }
 }
