@@ -27,7 +27,8 @@ namespace AnomalyDetectionSample
             List<List<double>> combinedSequences = new List<List<double>>(sequences1);
             combinedSequences.AddRange(sequences2);
 
-
+            CSVToHTMInput converter = new CSVToHTMInput();
+            var htmInput = converter.BuildHTMInput(combinedSequences);
         }
 
     }
