@@ -78,4 +78,8 @@ namespace AnomalyDetectionSample
                 throw new ArgumentException($"List contains non-numeric values. List: [{string.Join(",", list)}]");
             }
         }
+        Console.WriteLine("------------------------------");
+        Console.WriteLine();
+        Console.WriteLine("Testing the sequence for anomaly detection: " + string.Join(", ", list) + ".");
+    }
 }
