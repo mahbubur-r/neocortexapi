@@ -81,5 +81,18 @@ namespace AnomalyDetectionSample
         Console.WriteLine("------------------------------");
         Console.WriteLine();
         Console.WriteLine("Testing the sequence for anomaly detection: " + string.Join(", ", list) + ".");
+
+
+        double tolerance = 0.1;
+
+        bool startFromFirst = true;
+
+        double firstItem = list[0];
+        double secondItem = list[1];
+
+
+        var secondItemRes = predictor.Predict(secondItem);
+
+        Console.WriteLine("First element in the testing sequence from input list: " + firstItem);
     }
 }
