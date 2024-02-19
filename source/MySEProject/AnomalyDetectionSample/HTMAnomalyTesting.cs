@@ -100,6 +100,17 @@ namespace AnomalyDetectionSample
             var stokens2 = secondItemRes.First().PredictedInput.Split('-');
             var stokens3 = secondItemRes.First().Similarity;
             var stokens4 = stokens2.Reverse().ElementAt(2);
+            double predictedFirstItem = double.Parse(stokens4);
+            var firstanomalyScore = Math.Abs(predictedFirstItem - firstItem);
+            var fdeviation = firstanomalyScore / firstItem;
+
+            if (fdeviation <= tolerance)
+            {
+
+                Console.WriteLine($"No anomaly detected in the first element. HTM Engine found similarity to be:{stokens3}%. Starting check from beginning of the list.");
+                startFromFirst = true;
+
+            }
         }
     }
 }
