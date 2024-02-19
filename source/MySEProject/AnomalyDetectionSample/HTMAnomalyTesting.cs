@@ -94,5 +94,12 @@ namespace AnomalyDetectionSample
         var secondItemRes = predictor.Predict(secondItem);
 
         Console.WriteLine("First element in the testing sequence from input list: " + firstItem);
+        if (secondItemRes.Count > 0)
+        {
+            var stokens = secondItemRes.First().PredictedInput.Split('_');
+            var stokens2 = secondItemRes.First().PredictedInput.Split('-');
+            var stokens3 = secondItemRes.First().Similarity;
+            var stokens4 = stokens2.Reverse().ElementAt(2);
+        }
     }
 }
