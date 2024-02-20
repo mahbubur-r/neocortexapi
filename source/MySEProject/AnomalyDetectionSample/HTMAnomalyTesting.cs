@@ -111,6 +111,21 @@ namespace AnomalyDetectionSample
                 startFromFirst = true;
 
             }
+            else
+            {
+
+                Console.WriteLine($"****Anomaly detected**** in the first element. HTM Engine predicted it to be {predictedFirstItem} with similarity: {stokens3}%, but the actual value is {firstItem}. Moving to the next element.");
+                startFromFirst = false;
+
+            }
         }
+        else
+        {
+
+            Console.WriteLine("Anomaly detection cannot be performed for the first element. Starting check from beginning of the list.");
+            startFromFirst = true;
+
+        }
+    }
     }
 }
