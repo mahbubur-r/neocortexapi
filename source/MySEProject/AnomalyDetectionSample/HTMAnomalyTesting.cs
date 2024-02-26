@@ -126,6 +126,12 @@ namespace AnomalyDetectionSample
             startFromFirst = true;
 
         }
-    }
+        int checkCondition = startFromFirst ? 0 : 1;
+        for (int i = checkCondition; i < list.Length; i++)
+        {
+            var item = list[i];
+            var res = predictor.Predict(item);
+            Console.WriteLine("Current element in the testing sequence from input list: " + item);
+        }
     }
 }
