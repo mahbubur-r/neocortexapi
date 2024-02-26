@@ -132,6 +132,11 @@ namespace AnomalyDetectionSample
             var item = list[i];
             var res = predictor.Predict(item);
             Console.WriteLine("Current element in the testing sequence from input list: " + item);
-        }
+            if (res.Count > 0)
+            {
+                var tokens = res.First().PredictedInput.Split('_');
+                var tokens2 = res.First().PredictedInput.Split('-');
+                var tokens3 = res.First().Similarity;
+            }
     }
 }
