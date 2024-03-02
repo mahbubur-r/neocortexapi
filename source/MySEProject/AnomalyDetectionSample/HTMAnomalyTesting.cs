@@ -137,6 +137,24 @@ namespace AnomalyDetectionSample
                 var tokens = res.First().PredictedInput.Split('_');
                 var tokens2 = res.First().PredictedInput.Split('-');
                 var tokens3 = res.First().Similarity;
+                if (i < list.Length - 1)
+                {
+                    int nextIndex = i + 1;
+                    double nextItem = list[nextIndex];
+                    double predictedNextItem = double.Parse(tokens2.Last());
+                    var AnomalyScore = Math.Abs(predictedNextItem - nextItem);
+                    var deviation = AnomalyScore / nextItem;
+
+                    if (deviation <= tolerance)
+                    {
+                        Console.WriteLine("Anomaly not detected in the next element!! HTM Engine found similarity to be: " + tokens3 + "%.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"****Anomaly detected**** in the next element. HTM Engine predicted it to be {predictedNextItem} with similarity: {tokens3}%, but the actual value is {nextItem}.");
+                        i++;
+                        Console.WriteLine("As anomaly was detected, so we are skipping to the next element in our testing sequence.");
+                    }
+                }
             }
     }
-}
