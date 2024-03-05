@@ -156,5 +156,11 @@ namespace AnomalyDetectionSample
                         Console.WriteLine("As anomaly was detected, so we are skipping to the next element in our testing sequence.");
                     }
                 }
+                else
+                {
+                    Console.WriteLine("End of input list. Further anomaly testing cannot be continued.");
+                    Console.WriteLine();
+                    Console.WriteLine("------------------------------");
+                }
             }
     }
