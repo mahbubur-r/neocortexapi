@@ -29,6 +29,11 @@ namespace AnomalyDetectionSample
 
             CSVToHTMInput converter = new CSVToHTMInput();
             var htmInput = converter.BuildHTMInput(combinedSequences);
+
+            MultiSequenceLearning learning = new MultiSequenceLearning();
+            predictor = learning.Run(htmInput);
+
+            swh.Stop();
         }
 
     }
