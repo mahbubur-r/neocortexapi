@@ -34,6 +34,13 @@ namespace AnomalyDetectionSample
             predictor = learning.Run(htmInput);
 
             swh.Stop();
+
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("HTM Model trained!! Training time is: " + swh.Elapsed.TotalSeconds + " seconds.");
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
         }
 
     }
