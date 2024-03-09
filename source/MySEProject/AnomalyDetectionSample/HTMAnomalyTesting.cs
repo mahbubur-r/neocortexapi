@@ -163,4 +163,13 @@ namespace AnomalyDetectionSample
                     Console.WriteLine("------------------------------");
                 }
             }
+            else
+            {
+                Console.WriteLine("Nothing predicted from HTM Engine. Anomaly cannot be detected.");
+            }
+        }
+
+
     }
+
+}
