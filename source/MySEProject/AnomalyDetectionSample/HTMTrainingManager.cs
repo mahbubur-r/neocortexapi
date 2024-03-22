@@ -39,8 +39,8 @@ namespace AnomalyDetectionSample
             combinedSequences.AddRange(predictionSequences);
 
             // Convert sequences to HTM input format
-            CSVToHTMInput sequenceConverter = new CSVToHTMInput();
-            var htmInput = sequenceConverter.BuildHTMInput(combinedSequences);
+            CSVToHTMInputConverter sequenceConverter = new CSVToHTMInputConverter();
+            var htmInput = sequenceConverter.ConvertToHTMInput(combinedSequences);
 
             // Start multi-sequence learning experiment to generate predictor model
             MultiSequenceLearning learningAlgorithm = new MultiSequenceLearning();

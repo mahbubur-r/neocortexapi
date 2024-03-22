@@ -86,7 +86,7 @@ namespace AnomalyDetectionSample
 
             var numUniqueInputs = GetNumberOfInputs(sequences);
 
-            var seq = sequences.Take(1).ToList();
+            var seq = sequences.Take(2).ToList();
 
             CortexLayer<object, object> layer1 = new CortexLayer<object, object>("L1");
 
@@ -130,7 +130,7 @@ namespace AnomalyDetectionSample
 
             var lastPredictedValues = new List<string>(new string[] { "0" });
 
-            int maxCycles = 25;
+            int maxCycles = 100;
 
             //
             // Training SP to get stable. New-born stage.
