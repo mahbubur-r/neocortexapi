@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CSVFileReader.cs" />
+    <Compile Remove="HTMModeltraining.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="output\combined_data_training_and_predicting_folder.jpg" />
+    <None Remove="output\graph_of_data_training_folder.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NeoCortexApi" Version="1.1.4" />
   </ItemGroup>
 

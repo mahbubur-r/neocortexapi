@@ -86,6 +86,8 @@ namespace AnomalyDetectionSample
 
             var numUniqueInputs = GetNumberOfInputs(sequences);
 
+            var seq = sequences.Take(1).ToList();
+
             CortexLayer<object, object> layer1 = new CortexLayer<object, object>("L1");
 
             TemporalMemory tm = new TemporalMemory();
@@ -128,7 +130,7 @@ namespace AnomalyDetectionSample
 
             var lastPredictedValues = new List<string>(new string[] { "0" });
 
-            int maxCycles = 3500;
+            int maxCycles = 25;
 
             //
             // Training SP to get stable. New-born stage.
@@ -142,7 +144,7 @@ namespace AnomalyDetectionSample
 
                 Debug.WriteLine($"-------------- Newborn Cycle {cycle} ---------------");
 
-                foreach (var inputs in sequences)
+                foreach (var inputs in seq)
                 {
                     foreach (var input in inputs.Value)
                     {
@@ -167,7 +169,7 @@ namespace AnomalyDetectionSample
 
             //
             // Loop over all sequences.
-            foreach (var sequenceKeyPair in sequences)
+            foreach (var sequenceKeyPair in seq)
             {
                 Debug.WriteLine($"-------------- Sequences {sequenceKeyPair.Key} ---------------");
 
