@@ -208,7 +208,7 @@ List<List<double>> combinedSequences = new List<List<double>>(sequences1);
 combinedSequences.AddRange(sequences2);
 .....
 ```
-* In the end, we use [HTMAnomalyTesting](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/HTMAnomalyTesting.cs) to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CSVFileReader), combining and converting them for HTM training (CSVToHTMInput) and training the HTM engine (using HTMModelTraining) will be used here. We use the same class (CSVFolderReader) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
+* In the end, we use [HTMAnomalyTesting]to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CSVFileReader), combining and converting them for HTM training (CSVToHTMInput) and training the HTM engine (using HTMModelTraining) will be used here. We use the same class (CSVFolderReader) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
 ```csharp
 .....
 CSVFolderReader testseq = new CSVFolderReader(_predictingFolderPath);
@@ -268,7 +268,7 @@ We will then use this to detect anomalies.
 
 We use anomalyscore (difference ratio) for comparison with our already preset threshold. When it exceeds, probable anomalies are found.
 
-To run this project, use the following class/methods given in [Program.cs](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/Program.cs).
+To run this project, use the following class/methods given in [Program.cs].
 
 ```csharp
  HTMAnomalyTesting tester = new HTMAnomalyTesting();
@@ -277,7 +277,7 @@ To run this project, use the following class/methods given in [Program.cs](https
  
 # Results
 
-After running this project, we got the following [output](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/output/raw_output.txt).
+After running this project, we got the following [output]
 
 We can observe that the false negative rate is high in our output (0.65). It is desired that false negative rate should be as lower as possible in an anomaly detection program. Lower false positive rate is also desirable, but not absolutely essential.
 
