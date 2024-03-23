@@ -8,8 +8,8 @@ namespace AnomalyDetectionSample
         static void Main(string[] args)
         {
             // Starts experiment that demonstrates how to perform anomaly detection using multisequencelearning.
-            HTMAnomalyTesting tester = new HTMAnomalyTesting();
-            tester.Run();
+            HTMAnomalyExperiment tester = new HTMAnomalyExperiment();
+            tester.ExecuteExperiment();
 
         }
 

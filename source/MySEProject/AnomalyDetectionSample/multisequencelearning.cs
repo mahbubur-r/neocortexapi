@@ -86,7 +86,7 @@ namespace AnomalyDetectionSample
 
             var numUniqueInputs = GetNumberOfInputs(sequences);
 
-            var seq = sequences.Take(2).ToList();
+            var seq = sequences.Take(1).ToList();
 
             CortexLayer<object, object> layer1 = new CortexLayer<object, object>("L1");
 
