@@ -32,14 +32,14 @@ Please note that all files are read with .csv extension inside the folders, and 
 For this project, we are using artificial integer sequence data of network load (rounded off to nearest integer, in precentage), which are stored inside the csv files. Example of a csv file within training folder.
 
 ```
-49,52,55,48,52,47,46,50,52,47
-49,52,55,48,52,47,46,50,49,47
+69,72,75,68,72,67,66,70,72,67
+69,72,75,68,72,67,66,70,69,67
 .............................
 .............................
-48,54,55,48,52,47,46,50,49,45
-51,54,55,48,52,47,46,50,49,45
+68,74,75,68,72,67,66,70,69,65
+71,74,75,68,72,67,66,70,69,65
 ```
-Normally, the values stay within the range of 45 to 55. For testing, we consider anything outside this range to be an anomaly. We have uploaded the graphs of our data in this repository for reference. 
+Normally, the values stay within the range of 65 to 75. For testing, we consider anything outside this range to be an anomaly. We have uploaded the graphs of our data in this repository for reference. 
 
 1. Graph for numerical sequence data from training folder (without anomalies) can be found [here](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/output/graph_of_data_training_folder.jpg).
 2. Graph of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/output/combined_data_training_and_predicting_folder.jpg).
