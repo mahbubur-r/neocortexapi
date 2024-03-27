@@ -297,6 +297,6 @@ tester.ExecuteExperiment();
 
 After running this project, we got the following [output](![image](https://github.com/UniversityOfAppliedSciencesFrankfurt/se-cloud-2023-2024/assets/148788864/32870cb4-0403-4982-83fd-1d20b3df702b))
 
-We can observe that the false negative rate is high in our output (0.65). It is desired that false negative rate should be as lower as possible in an anomaly detection program. Lower false positive rate is also desirable, but not absolutely essential.
+We can observe that the accuracy rate is between 50% - 70%. It is desired that high accuracy should on the sequence is required in an anomaly detection program. Due to hardware specification of our machine, we unable to run the program with lots of cycle and sequence. However, accuracy can be improved by running more data sequence and cycle.
 
 Although, it depends on a number of factors, like quantity (the more, the better) and quality of data, and hyperparameters used to tune and train model; more data should be used for training, and hyperparameters should be further tuned to find the most optimal setting for training to get the best results. We were using less amount of numerical sequences as data to demonstrate our sample project due to time and computational constraints, but that can be improved if we use better resources, like cloud.
