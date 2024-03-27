@@ -39,11 +39,119 @@ For this project, we are using artificial integer sequence data of network load 
 68,74,75,68,72,67,66,70,69,65
 71,74,75,68,72,67,66,70,69,65
 ```
-Normally, the values stay within the range of 65 to 75. For testing, we consider anything outside this range to be an anomaly. We have uploaded the graphs of our data in this repository for reference. 
+Normally, the values stay within the range of 65 to 75. For testing, we consider anything outside this range to be an anomaly. We have uploaded the anomaly results of our data in this repository for reference. 
 
-1. Graph for numerical sequence data from training folder (without anomalies) can be found [here](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/output/graph_of_data_training_folder.jpg).
-2. Graph of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/output/combined_data_training_and_predicting_folder.jpg).
+1. output result of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output).
 
+## Execution of the project
+
+Our project is executed in the following way. 
+
+* In the beginning, we have ExtractSequencesFromFolder method of [CsvSequenceFolder](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/CSVFolderReader.cs) class to read all the files placed inside a folder. These classes store the read sequences to a list of numeric sequences, which will be used in a number of occasions later. These classes have exception handling implemented inside for handling non-numeric data. Data can be trimmed using Trimsequences method. It trims one to four elements(Number 1 to 4 is decided randomly) from the beginning of a numeric sequence and returns it.
+
+```csharp
+ public List<List<double>> ExtractSequencesFromFolder()
+        {
+         ....  
+          return folderSequences;
+        }
+
+public static List<List<double>> TrimSequences(List<List<double>> sequences)
+        {
+        ....
+          return trimmedSequences;
+        }
+```
+
+* After that, the method ConvertToHTMInput of [CSVToHTMInputConverter](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/CSVToHTMInput.cs) class is there which converts all the read sequences to a format suitable for HTM training.
+```csharp
+Dictionary<string, List<double>> dictionary = new Dictionary<string, List<double>>();
+for (int i = 0; i < sequences.Count; i++)
+    {
+     // Unique key created and added to dictionary for HTM Input                
+     string key = "S" + (i + 1);
+     List<double> value = sequences[i];
+     dictionary.Add(key, value);
+    }
+     return dictionary;
+```
+* After that, we have ExecuteHTMModelTraining method of [HTMTrainingManager](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/HTMModeltraining.cs) class to train our model using the converted sequences. The numerical data sequences from training (for learning) and predicting folders are combined before training the HTM engine. This class returns our trained model object predictor.
+```csharp
+.....
+MultiSequenceLearning learning = new MultiSequenceLearning();
+predictor = learning.Run(htmInput);
+.....
+.....
+List<List<double>> combinedSequences = new List<List<double>>(sequences1);
+combinedSequences.AddRange(sequences2);
+.....
+```
+* In the end, we use [HTMAnomalyExperiment]to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CSVFileReader), combining and converting them for HTM training (CSVToHTMInput) and training the HTM engine (using HTMModelTraining) will be used here. We use the same class (CSVFolderReader) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
+```csharp
+.....
+CSVFolderReader testseq = new CSVFolderReader(_predictingCSVFolderPath);
+var inputtestseq = testseq.ExtractSequencesFromFolder();
+var triminputtestseq = CSVFolderReader.TrimSequences(inputtestseq);
+.....
+```
+Path to training and predicting folder is set as default and passed on the constructor, or can be set inside the class manually.
+
+```csharp
+.....
+_trainingCSVFolderPath = Path.Combine(projectBaseDirectory, trainingFolderPath);
+_predictingCSVFolderPath = Path.Combine(projectBaseDirectory, predictingFolderPath);
+.....
+```
+In the end, DetectAnomaly method is used to detect anomalies in our trimmed sequences one by one, using our trained HTM Model predictor. 
+```csharp
+foreach (List<double> list in triminputtestseq)
+       {
+         .....
+         double[] lst = list.ToArray();
+         DetectAnomaly(myPredictor, lst);
+       }
+```
+Exception handling is present, such that errors thrown from DetectAnomaly method can be handled (like passing of non-numeric values, or number of elements in list less than two).
+
+[DetectAnomaly](https://github.com/mahbubur-r/neocortexapi/blob/98ae630c79221e9d7a792282c5faabc08a2b794f/source/MySEProject/AnomalyDetectionSample/HTMAnomalyExperiment.cs#L105) is the main method from ExtractSequencesFromFolder class which detects anomalies in our data. It traverses each value of a list one by one in a sliding window manner, and uses trained model predictor to predict the next element for comparison. We use an anomalyscore to quantify the comparison and detect anomalies; if the prediction crosses a certain tolerance level, it is declared as an anomaly.
+
+In our sliding window approach, naturally the first element is skipped, so we ensure that the first element is checked for anomaly in the beginning.
+
+We can get our prediction in a list of results in format of "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]" from our trained model Predictor using the following:
+
+```csharp
+var res = predictor.Predict(item);
+```
+Here, assume that item passed to the model is of int type with value 8. We can use this to analyze how prediction works. When this is executed,
+```csharp
+foreach (var pred in res)
+ {
+   Console.WriteLine($"{pred.PredictedInput} - {pred.Similarity}");
+    }
+```
+We get the following output.
+```
+S2_2-9-10-7-11-8-1 - 100
+S1_1-2-3-4-2-5-0 - 5
+S1_-1.0-0-1-2-3-4 - 0
+S1_-1.0-0-1-2-3-4-2 - 0
+```
+We know that the item we passed here is 8. The first line gives us the best prediction with similarity accuracy. We can easily get the predicted value which will come after 8 (here, it is 1), and previous value (11, in this case). We use basic string operations to get our required values.
+
+We will then use this to detect anomalies.
+
+* When we iteratively pass values to DetectAnomaly method using our sliding window approach, we will not be able to detect anomaly in the first element. So, in the beginning, we use the second element of the list to predict and compare the previous element (which is the first element). A flag is set to control the command execution; if the first element has anomaly, then we will not use it to detect our second element. We will directly start from second element. Otherwise, we will start from first element as usual.
+
+* Now, when we traverse the list one by one to the right, we pass the value to the predictor to get the next value and compare the prediction with the actual value. If there's anomaly, then it is outputted to the user, and the anomalous element is skipped. Upon reaching to the last element, we can end our traversal and move on to next list.
+
+We use anomalyscore (difference ratio) for comparison with our already preset threshold. When it exceeds, probable anomalies are found.
+
+To run this project, use the following class/methods given in [Program.cs].
+
+```csharp
+ HTMAnomalyTesting tester = new HTMAnomalyTesting();
+ tester.Run();
+```
 ### Encoding:
 
 Encoding of our input data is very important, such that it can be processed by our HTM Engine. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/Encoders.md). 
@@ -165,120 +273,12 @@ return new Predictor(layer1, mem, cls)
 `````
 We will use this for prediction in later parts of our project.
 
-## Execution of the project
 
-Our project is executed in the following way. 
-
-* In the beginning, we have ReadFolder method of [CSVFolderReader](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/CSVFolderReader.cs) class to read all the files placed inside a folder. Alternatively, we can use ReadFile method of [CSVFileReader](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/CSVFileReader.cs) to read a single file; it works in a similar way, except that it reads a single file. These classes store the read sequences to a list of numeric sequences, which will be used in a number of occasions later. These classes have exception handling implemented inside for handling non-numeric data. Data can be trimmed using Trimsequences method. It trims one to four elements(Number 1 to 4 is decided randomly) from the beginning of a numeric sequence and returns it.
-
-```csharp
- public List<List<double>> ReadFolder()
-        {
-         ....  
-          return folderSequences;
-        }
-
-public static List<List<double>> TrimSequences(List<List<double>> sequences)
-        {
-        ....
-          return trimmedSequences;
-        }
-```
-
-* After that, the method BuildHTMInput of [CSVToHTMInput](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/CSVToHTMInput.cs) class is there which converts all the read sequences to a format suitable for HTM training.
-```csharp
-Dictionary<string, List<double>> dictionary = new Dictionary<string, List<double>>();
-for (int i = 0; i < sequences.Count; i++)
-    {
-     // Unique key created and added to dictionary for HTM Input                
-     string key = "S" + (i + 1);
-     List<double> value = sequences[i];
-     dictionary.Add(key, value);
-    }
-     return dictionary;
-```
-* After that, we have RunHTMModelLearning method of [HTMModeltraining](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/HTMModeltraining.cs) class to train our model using the converted sequences. The numerical data sequences from training (for learning) and predicting folders are combined before training the HTM engine. This class returns our trained model object predictor.
-```csharp
-.....
-MultiSequenceLearning learning = new MultiSequenceLearning();
-predictor = learning.Run(htmInput);
-.....
-.....
-List<List<double>> combinedSequences = new List<List<double>>(sequences1);
-combinedSequences.AddRange(sequences2);
-.....
-```
-* In the end, we use [HTMAnomalyTesting]to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CSVFileReader), combining and converting them for HTM training (CSVToHTMInput) and training the HTM engine (using HTMModelTraining) will be used here. We use the same class (CSVFolderReader) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
-```csharp
-.....
-CSVFolderReader testseq = new CSVFolderReader(_predictingFolderPath);
-var inputtestseq = testseq.ReadFolder();
-var triminputtestseq = CSVFolderReader.TrimSequences(inputtestseq);
-.....
-```
-Path to training and predicting folder is set as default and passed on the constructor, or can be set inside the class manually.
-
-```csharp
-.....
- _trainingFolderPath = Path.Combine(projectbaseDirectory, trainingFolderPath);
-_predictingFolderPath = Path.Combine(projectbaseDirectory, predictingFolderPath);
-.....
-```
-In the end, DetectAnomaly method is used to detect anomalies in our trimmed sequences one by one, using our trained HTM Model predictor. 
-```csharp
-foreach (List<double> list in triminputtestseq)
-       {
-         .....
-         double[] lst = list.ToArray();
-         DetectAnomaly(myPredictor, lst);
-       }
-```
-Exception handling is present, such that errors thrown from DetectAnomaly method can be handled (like passing of non-numeric values, or number of elements in list less than two).
-
-DetectAnomaly is the main method which detects anomalies in our data. It traverses each value of a list one by one in a sliding window manner, and uses trained model predictor to predict the next element for comparison. We use an anomalyscore to quantify the comparison and detect anomalies; if the prediction crosses a certain tolerance level, it is declared as an anomaly.
-
-In our sliding window approach, naturally the first element is skipped, so we ensure that the first element is checked for anomaly in the beginning.
-
-We can get our prediction in a list of results in format of "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]" from our trained model Predictor using the following:
-
-```csharp
-var res = predictor.Predict(item);
-```
-Here, assume that item passed to the model is of int type with value 8. We can use this to analyze how prediction works. When this is executed,
-```csharp
-foreach (var pred in res)
- {
-   Console.WriteLine($"{pred.PredictedInput} - {pred.Similarity}");
-    }
-```
-We get the following output.
-```
-S2_2-9-10-7-11-8-1 - 100
-S1_1-2-3-4-2-5-0 - 5
-S1_-1.0-0-1-2-3-4 - 0
-S1_-1.0-0-1-2-3-4-2 - 0
-```
-We know that the item we passed here is 8. The first line gives us the best prediction with similarity accuracy. We can easily get the predicted value which will come after 8 (here, it is 1), and previous value (11, in this case). We use basic string operations to get our required values.
-
-We will then use this to detect anomalies.
-
-* When we iteratively pass values to DetectAnomaly method using our sliding window approach, we will not be able to detect anomaly in the first element. So, in the beginning, we use the second element of the list to predict and compare the previous element (which is the first element). A flag is set to control the command execution; if the first element has anomaly, then we will not use it to detect our second element. We will directly start from second element. Otherwise, we will start from first element as usual.
-
-* Now, when we traverse the list one by one to the right, we pass the value to the predictor to get the next value and compare the prediction with the actual value. If there's anomaly, then it is outputted to the user, and the anomalous element is skipped. Upon reaching to the last element, we can end our traversal and move on to next list.
-
-We use anomalyscore (difference ratio) for comparison with our already preset threshold. When it exceeds, probable anomalies are found.
-
-To run this project, use the following class/methods given in [Program.cs].
-
-```csharp
- HTMAnomalyTesting tester = new HTMAnomalyTesting();
- tester.Run();
-```
  
 # Results
 
 After running this project, we got the following [output]
 
-We can observe that the false negative rate is high in our output (0.65). It is desired that false negative rate should be as lower as possible in an anomaly detection program. Lower false positive rate is also desirable, but not absolutely essential.
+We can observe that the accuracy rate is between 50% - 70%. It is desired that high accuracy should on the sequence is required in an anomaly detection program. Due to hardware specification of our machine, we unable to run the program with lots of cycle and sequence. However, accuracy can be improved by running more data sequence and cycle.
 
 Although, it depends on a number of factors, like quantity (the more, the better) and quality of data, and hyperparameters used to tune and train model; more data should be used for training, and hyperparameters should be further tuned to find the most optimal setting for training to get the best results. We were using less amount of numerical sequences as data to demonstrate our sample project due to time and computational constraints, but that can be improved if we use better resources, like cloud.

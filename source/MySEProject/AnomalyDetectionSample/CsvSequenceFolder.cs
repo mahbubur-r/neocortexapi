@@ -1,53 +1,48 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace AnomalyDetectionSample
 {
     /// <summary>
-    /// Reads the CSV files inside a folder and returns its contents as a list of sequences.
+    /// Utility class for reading and processing CSV files from a specified folder.
     /// </summary>
-    public class CSVFolderReader
+    public class CsvSequenceFolder
     {
-        private string _folderPathToCSV;
+        private readonly string _folderPath;
 
         /// <summary>
-        /// Creates a new instance of the CSVFolderReader class with the provided file path to the constructor.
+        /// Initializes a new instance of the CsvSequenceProcessor class with the provided folder path.
         /// </summary>
-        /// <param name="folderPathToCSV">The path to the folder containing the CSV files.</param>
-        public CSVFolderReader(string folderPathToCSV)
+        /// <param name="folderPath">The path to the folder containing the CSV files.</param>
+        public CsvSequenceFolder(string folderPath)
         {
-            _folderPathToCSV = folderPathToCSV;
+            _folderPath = folderPath;
         }
 
         /// <summary>
-        /// Reads all CSV files in the folder, path to the folder is specified in the constructor,
-        /// and returns its contents as a list of sequences.
+        /// Reads all CSV files in the specified folder and returns their contents as a list of sequences.
         /// </summary>
         /// <returns>A list of sequences contained in the CSV files present in the folder.</returns>
-        public List<List<double>> ReadFolder()
+        public List<List<double>> ExtractSequencesFromFolder()
         {
             List<List<double>> folderSequences = new List<List<double>>();
+            string[] fileEntries = Directory.GetFiles(_folderPath, "*.csv");
 
-            // All the CSV files present inside the folder are taken
-            string[] fileEntries = Directory.GetFiles(_folderPathToCSV, "*.csv");
-
-            // Iterating through each CSV file inside the folder
             foreach (string fileName in fileEntries)
             {
                 string[] csvLines = File.ReadAllLines(fileName);
                 List<List<double>> sequencesInFile = new List<List<double>>();
 
-                // Looping through each line in the current CSV file
-                for (int i = 0; i < csvLines.Length; i++)
+                foreach (string line in csvLines)
                 {
-                    string[] columns = csvLines[i].Split(new char[] { ',' });
+                    string[] columns = line.Split(',');
                     List<double> sequence = new List<double>();
 
-                    // Loop through each column in the current line
-                    for (int j = 0; j < columns.Length; j++)
+                    foreach (string column in columns)
                     {
-                        // Value of column is parsed as double and added to sequence
-                        // if it fails then exception is thrown
-                        if (double.TryParse(columns[j], out double value))
+                        if (double.TryParse(column, out double value))
                         {
                             sequence.Add(value);
                         }
@@ -64,21 +59,20 @@ namespace AnomalyDetectionSample
         }
 
         /// <summary>
-        /// This method reads all CSV files in the folder path passed on to the constructor,
-        /// and outputs its contents to the console.
+        /// Outputs the sequences extracted from the CSV files in the specified folder to the console.
         /// </summary>
-        public void CSVSequencesConsoleOutput()
+        public void DisplayCsvSequences()
         {
-            List<List<double>> sequences = ReadFolder();
-            // Looping through each sequence and displaying it in the console
+            List<List<double>> sequences = ExtractSequencesFromFolder();
+
             for (int i = 0; i < sequences.Count; i++)
             {
-                Console.Write("Sequence " + (i + 1) + ": ");
+                Console.Write($"Sequence {i + 1}: ");
                 foreach (double number in sequences[i])
                 {
-                    Console.Write(number + " ");
+                    Console.Write($"{number} ");
                 }
-                Console.WriteLine("");
+                Console.WriteLine();
             }
         }
 
@@ -89,19 +83,17 @@ namespace AnomalyDetectionSample
         /// <returns>A new list of trimmed sequences.</returns>
         public static List<List<double>> TrimSequences(List<List<double>> sequences)
         {
-            Random rnd = new Random();
+            Random random = new Random();
             List<List<double>> trimmedSequences = new List<List<double>>();
 
             foreach (List<double> sequence in sequences)
             {
-                // Generate a random number between 1 and 4
-                int numElementsToRemove = rnd.Next(1, 5);
+                int numElementsToRemove = random.Next(1, 5);
                 List<double> trimmedSequence = sequence.Skip(numElementsToRemove).ToList();
                 trimmedSequences.Add(trimmedSequence);
             }
 
             return trimmedSequences;
         }
-
     }
 }
