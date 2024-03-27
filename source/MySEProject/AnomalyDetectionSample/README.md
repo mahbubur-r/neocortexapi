@@ -289,8 +289,8 @@ We use anomalyscore (difference ratio) for comparison with our already preset th
 To run this project, use the following class/methods given in [Program.cs].
 
 ```csharp
- HTMAnomalyTesting tester = new HTMAnomalyTesting();
- tester.Run();
+HTMAnomalyExperiment tester = new HTMAnomalyExperiment();
+tester.ExecuteExperiment();
 ```
  
 # Results
