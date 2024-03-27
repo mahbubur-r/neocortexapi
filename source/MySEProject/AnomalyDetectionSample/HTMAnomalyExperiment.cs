@@ -92,6 +92,16 @@ namespace AnomalyDetectionSample
             Console.WriteLine("Anomaly detection experiment completed.");
         }
 
+        /// <summary>
+        /// Detects anomalies in the input list using the HTM trained model.
+        /// The anomaly score is calculated using a sliding window approach.
+        /// The difference between the predicted value and the actual value is used to calculate the anomaly score.
+        /// If the difference exceeds a certain tolerance set earlier, anomaly is detected.
+        /// Returns the result in a list of strings
+        /// </summary>
+        /// <param name="predictor">Trained HTM model, used for prediction.</param>
+        /// <param name="list">Input list which will be used to detect anomalies.</param>
+        /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
         private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.1)
         {
             if (sequence.Length < 2)
@@ -177,7 +187,12 @@ namespace AnomalyDetectionSample
 
             return resultOutputLines;
         }
-
+        /// <summary>
+        /// Show output of anomalies in console
+        /// </summary>
+        /// <param name="predictor">Trained HTM model, used for prediction.</param>
+        /// <param name="list">Input list which will be used to detect anomalies.</param>
+        /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
         private void ShowOutputOnConsole(Predictor predictor, double[] sequence, double tolerance)
         {
             Console.WriteLine("------------------------------");
