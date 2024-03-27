@@ -128,9 +128,10 @@ The configuration that we have used is as follows. More on [this](https://github
 
 ### Multisequence learning
 
-The [RunExperiment](https://github.com/mahbubur-r/neocortexapi/blob/34299872fcd5cdb30e6ab5fa41f8d46a19e6331e/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L74) method inside the [multisequencelearning](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs) class file demonstrates how multisequence learning works. To summarize, 
+The [multisequencelearning](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs) class file's [RunExperiment](https://github.com/mahbubur-r/neocortexapi/blob/34299872fcd5cdb30e6ab5fa41f8d46a19e6331e/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L74) method provides an example of how multisequence learning functions. As a summary,
 
-* HTM Configuration is taken and memory of connections are initialized. After that, HTM Classifier, Cortex layer and HomeostaticPlasticityController are initialized.
+* Initialization of connection memory and HTM configuration are performed. The HTM Classifier, Cortex layer, and Homeostatic Plasticity Controller are then initialized.
+
 ```csharp
 .......
 var mem = new Connections(cfg);
@@ -142,14 +143,16 @@ HomeostaticPlasticityController hpc = new HomeostaticPlasticityController(mem, n
 .......
 ```
 
-* After that, Spatial Pooler and Temporal Memory is initialized.
+* Following that, Temporal Memory and Spatial Pooler are initialized.
+
 ```csharp
 .....
 TemporalMemory tm = new TemporalMemory();
 SpatialPoolerMT sp = new SpatialPoolerMT(hpc);
 .....
 ```
-* After that, spatial pooler memory is added to cortex layer and trained for maximum number of cycles.
+* The cortical layer is then added with spatial pooler memory, which is trained for the maximum number of cycles.
+
 ```csharp
 .....
 layer1.HtmModules.Add("sp", sp);
@@ -157,7 +160,8 @@ int maxCycles = 3500;
 for (int i = 0; i < maxCycles && isInStableState == false; i++)
 .....
 `````
-* After that, temporal memory is added to cortex layer to learn all the input sequences.
+* In order to learn every input sequence, temporal memory is then introduced to the cortical layer.
+
 ```csharp
 .....
 layer1.HtmModules.Add("tm", tm);
@@ -166,13 +170,15 @@ foreach (var sequenceKeyPair in sequences){
 }
 .....
 ```
-* Finally, the trained cortex layer and HTM classifier is returned.
+* The HTM classifier and trained cortical layer are finally returned.
+
 ```csharp
 .....
 return new Predictor(layer1, mem, cls)
 .....
 `````
-We will use this for prediction in later parts of our project.
+In later stages of our project, we'll use this to make predictions.
+
 
 ## Execution of the project
 
