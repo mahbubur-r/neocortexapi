@@ -295,7 +295,7 @@ tester.ExecuteExperiment();
  
 # Results
 
-After running this project, we got the following [output](![image](https://github.com/UniversityOfAppliedSciencesFrankfurt/se-cloud-2023-2024/assets/148788864/32870cb4-0403-4982-83fd-1d20b3df702b))
+After running this project, we got the following [output](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/Output.txt)
 
 We can observe that the accuracy rate is between 50% - 70%. It is desired that high accuracy should on the sequence is required in an anomaly detection program. Due to hardware specification of our machine, we unable to run the program with lots of cycle and sequence. However, accuracy can be improved by running more data sequence and cycle.
 
