@@ -1,27 +1,27 @@
-# ML23/24-08: Implement Anomaly Detection Sample
+***Topic: ML22/23-12	Implement Anomaly Detection Sample***
+
+***Getting Started***
+To run this program, you need to have the following software installed on your machine:
+
+Visual Studio 2019 or later
+.NET Framework 4.7.2 or later
+
+***Installing***
+-Clone this repository or download the code as a zip file.
+-Extract the zip file to a directory of your choice.
+-Open the solution file NeoCortexApiSample.sln in Visual Studio.
+-Build the solution by selecting Build Solution from the Build menu.
+
+This project is based on NeoCortex API. More details [here](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/gettingStarted.md).
+
+***Summary of the Project:***
+This code is a C# console application that demonstrates a typical experiment for Spatial Pooling (SP) and Temporal Memory (TM) algorithms of NeoCortexApi library. The experiment reads sequences of numeric data from a CSV file, learns them using the SP and TM algorithms, and then predicts the next element of a randomly generated test sequence. The code also shows how to detect anomalies in the test sequence using the Anomaly Detector.
 
 
 # Introduction:
 
 HTM (Hierarchical Temporal Memory) is a machine learning algorithm that processes time-series data in a distributed manner using a hierarchical network of nodes. Each nodes, or columns, can be trained to learn, and recognize patterns in input data. This can be used in identifying anomalies/deviations from normal patterns. It is a promising method for predicting and detecting anomalies in a range of applications. In this project, we will train our HTM Engine using the multisequencelearning class in the NeoCortex API, and then use the trained engine to learn patterns and identify anomalies. Specifically, numerical sequences will be read from various CSV files inside a folder in order to create an anomaly detection system.  
 
-# Requirements
-
-To run this project, we need.
-* [.NET 7.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
-* Nuget package: [NeoCortexApi Version= 1.1.4](https://www.nuget.org/packages/NeoCortexApi/)
-
-For code debugging, we recommend using visual studio IDE/visual studio code. This project can be run on [github codespaces](https://github.com/features/codespaces) as well.
-
-# Usage
-
-To run this project, 
-
-* Install .NET SDK. Then using code editor/IDE of your choice, create a new console project and place all the C# codes inside your project folder. 
-* Add/reference nuget package NeoCortexApi v1.1.4 to this project.
-* Place numerical sequence CSV Files (datasets) under relevant folders respectively. All the folders should be inside the project folder. More details given below.
-
-Our project is based on NeoCortex API. More details [here](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/gettingStarted.md).
 
 # Details
 
@@ -295,7 +295,7 @@ tester.ExecuteExperiment();
  
 # Results
 
-After running this project, we got the following [output]
+After running this project, we got the following [output](![image](https://github.com/UniversityOfAppliedSciencesFrankfurt/se-cloud-2023-2024/assets/148788864/32870cb4-0403-4982-83fd-1d20b3df702b))
 
 We can observe that the false negative rate is high in our output (0.65). It is desired that false negative rate should be as lower as possible in an anomaly detection program. Lower false positive rate is also desirable, but not absolutely essential.
 
