@@ -1,9 +1,9 @@
-# ML22/23-12: Implement Anomaly Detection Sample
+# ML23/24-08: Implement Anomaly Detection Sample
 
 
 # Introduction:
 
-HTM (Hierarchical Temporal Memory) is a machine learning algorithm, which uses a hierarchical network of nodes to process time-series data in a distributed way. Each nodes, or columns, can be trained to learn, and recognize patterns in input data. This can be used in identifying anomalies/deviations from normal patterns. It is a promising approach for anomaly detection and prediction in a variety of applications. In our project, we are going to use multisequencelearning class in NeoCortex API to implement an anomaly detection system, such that numerical sequences are read from multiple csv files inside a folder, train our HTM Engine, and use the trained engine for learning patterns and detect anomalies.  
+HTM (Hierarchical Temporal Memory) is a machine learning algorithm that processes time-series data in a distributed manner using a hierarchical network of nodes. Each nodes, or columns, can be trained to learn, and recognize patterns in input data. This can be used in identifying anomalies/deviations from normal patterns. It is a promising method for predicting and detecting anomalies in a range of applications. In this project, we will train our HTM Engine using the multisequencelearning class in the NeoCortex API, and then use the trained engine to learn patterns and identify anomalies. Specifically, numerical sequences will be read from various CSV files inside a folder in order to create an anomaly detection system.  
 
 # Requirements
 
