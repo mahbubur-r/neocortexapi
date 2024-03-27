@@ -12,8 +12,8 @@ namespace AnomalyDetectionSample
     /// </summary>
     public class HTMAnomalyExperiment
     {
-        private readonly string _trainingFolderPath;
-        private readonly string _predictingFolderPath;
+        private readonly string _trainingCSVFolderPath;
+        private readonly string _predictingCSVFolderPath;
         private static double _totalAccuracy = 0.0;
         private static int _iterationCount = 0;
         private readonly double _tolerance = 0.1;
@@ -26,8 +26,8 @@ namespace AnomalyDetectionSample
         public HTMAnomalyExperiment(string trainingFolderPath = "anomaly_training", string predictingFolderPath = "anomaly_predicting")
         {
             string projectBaseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
-            _trainingFolderPath = Path.Combine(projectBaseDirectory, trainingFolderPath);
-            _predictingFolderPath = Path.Combine(projectBaseDirectory, predictingFolderPath);
+            _trainingCSVFolderPath = Path.Combine(projectBaseDirectory, trainingFolderPath);
+            _predictingCSVFolderPath = Path.Combine(projectBaseDirectory, predictingFolderPath);
         }
 
         /// <summary>
@@ -38,15 +38,15 @@ namespace AnomalyDetectionSample
             HTMTrainingManager htmModel = new HTMTrainingManager();
             Predictor predictor;
 
-            htmModel.ExecuteHTMModelTraining(_trainingFolderPath, _predictingFolderPath, out predictor);
+            htmModel.ExecuteHTMModelTraining(_trainingCSVFolderPath, _predictingCSVFolderPath, out predictor);
 
             Console.WriteLine();
             Console.WriteLine("Starting the anomaly detection experiment...");
             Console.WriteLine();
 
-            CSVFolderReader testSequencesReader = new CSVFolderReader(_predictingFolderPath);
-            var inputSequences = testSequencesReader.ReadFolder();
-            var trimmedInputSequences = CSVFolderReader.TrimSequences(inputSequences);
+            CsvSequenceFolder testSequencesReader = new CsvSequenceFolder(_predictingCSVFolderPath);
+            var inputSequences = testSequencesReader.ExtractSequencesFromFolder();
+            var trimmedInputSequences = CsvSequenceFolder.TrimSequences(inputSequences);
             predictor.Reset();
 
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");

@@ -27,12 +27,12 @@ namespace AnomalyDetectionSample
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             // Read numerical sequences from CSV files in the specified training folder
-            CSVFolderReader trainingReader = new CSVFolderReader(trainingFolderPath);
-            var trainingSequences = trainingReader.ReadFolder();
+            CsvSequenceFolder trainingReader = new CsvSequenceFolder(trainingFolderPath);
+            var trainingSequences = trainingReader.ExtractSequencesFromFolder();
 
             // Read numerical sequences from CSV files in the specified prediction folder
-            CSVFolderReader predictionReader = new CSVFolderReader(predictionFolderPath);
-            var predictionSequences = predictionReader.ReadFolder();
+            CsvSequenceFolder predictionReader = new CsvSequenceFolder(predictionFolderPath);
+            var predictionSequences = predictionReader.ExtractSequencesFromFolder();
 
             // Combine sequences from both training and prediction folders
             List<List<double>> combinedSequences = new List<List<double>>(trainingSequences);
