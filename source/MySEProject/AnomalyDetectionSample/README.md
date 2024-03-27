@@ -39,7 +39,17 @@ We are employing artificial integer sequence data of network load for this proje
 68,74,75,68,72,67,66,70,69,65
 71,74,75,68,72,67,66,70,69,65
 ```
-Normally, the values stay within the range of 65 to 75. All values outside of this range are considered anomalies for testing purposes. We have uploaded the anomaly results of our data in this repository for reference.
+Normally, the values stay within the range of 65 to 75. All values outside of this range are considered anomalies for testing purposes. However, in order to identify anomalies, we have a csv file in the predicting folder. Typically, some of the data in this file does not fall within 65 and 75. 
+
+```
+71,74,98,68,92,65,66,70,69,65
+71,74,75,68,72,65,66,30,69,35
+.............................
+.............................
+71,74,75,71,72,65,36,70,69,65
+71,75,75,71,72,65,66,70,98,95
+```
+We have uploaded the anomaly results of our data in this repository for reference.
 
 1. output result of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output).
 
