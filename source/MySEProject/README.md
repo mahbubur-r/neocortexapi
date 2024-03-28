@@ -295,7 +295,7 @@ In later stages of our project, we'll use this to make predictions.
  
 # Results
 
-After running this project, we got the following output -
+Following the project's execution, we obtained the following results:
 
 ```
 Testing the sequence for anomaly detection: 72, 67, 66, 90, 69, 97.
