@@ -1,4 +1,4 @@
-***Topic: ML22/23-12	Implement Anomaly Detection Sample***
+***Topic: ML23/24-08 Implement Anomaly Detection Sample***
 
 ***Getting Started***
 To run this program, you need to have the following software installed on your machine:
