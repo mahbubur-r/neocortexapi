@@ -1,35 +1,35 @@
-# ML22/23-12: Implement Anomaly Detection Sample
+***Topic: ML23/24-08 Implement Anomaly Detection Sample***
+
+***Getting Started***
+To run this program, you need to have the following software installed on your machine:
+
+Visual Studio 2019 or later
+.NET Framework 4.7.2 or later
+
+***Installing***
+-Clone this repository or download the code as a zip file.
+-Extract the zip file to a directory of your choice.
+-Open the solution file NeoCortexApiSample.sln in Visual Studio.
+-Build the solution by selecting Build Solution from the Build menu.
+
+This project is based on NeoCortex API. More details [here](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/gettingStarted.md).
+
+***Summary of the Project:***
+This code is a C# console application that demonstrates a typical experiment for Spatial Pooling (SP) and Temporal Memory (TM) algorithms of NeoCortexApi library. The experiment reads sequences of numeric data from a CSV file, learns them using the SP and TM algorithms, and then predicts the next element of a randomly generated test sequence. The code also shows how to detect anomalies in the test sequence using the Anomaly Detector.
 
 
 # Introduction:
 
-HTM (Hierarchical Temporal Memory) is a machine learning algorithm, which uses a hierarchical network of nodes to process time-series data in a distributed way. Each nodes, or columns, can be trained to learn, and recognize patterns in input data. This can be used in identifying anomalies/deviations from normal patterns. It is a promising approach for anomaly detection and prediction in a variety of applications. In our project, we are going to use multisequencelearning class in NeoCortex API to implement an anomaly detection system, such that numerical sequences are read from multiple csv files inside a folder, train our HTM Engine, and use the trained engine for learning patterns and detect anomalies.  
+HTM (Hierarchical Temporal Memory) is a machine learning algorithm that processes time-series data in a distributed manner using a hierarchical network of nodes. Each nodes, or columns, can be trained to learn, and recognize patterns in input data. This can be used in identifying anomalies/deviations from normal patterns. It is a promising method for predicting and detecting anomalies in a range of applications. In this project, we will train our HTM Engine using the multisequencelearning class in the NeoCortex API, and then use the trained engine to learn patterns and identify anomalies. Specifically, numerical sequences will be read from various CSV files inside a folder in order to create an anomaly detection system.  
 
-# Requirements
-
-To run this project, we need.
-* [.NET 7.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
-* Nuget package: [NeoCortexApi Version= 1.1.4](https://www.nuget.org/packages/NeoCortexApi/)
-
-For code debugging, we recommend using visual studio IDE/visual studio code. This project can be run on [github codespaces](https://github.com/features/codespaces) as well.
-
-# Usage
-
-To run this project, 
-
-* Install .NET SDK. Then using code editor/IDE of your choice, create a new console project and place all the C# codes inside your project folder. 
-* Add/reference nuget package NeoCortexApi v1.1.4 to this project.
-* Place numerical sequence CSV Files (datasets) under relevant folders respectively. All the folders should be inside the project folder. More details given below.
-
-Our project is based on NeoCortex API. More details [here](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/gettingStarted.md).
 
 # Details
 
-We have used [MultiSequenceLearning](https://github.com/ddobric/neocortexapi/blob/master/source/Samples/NeoCortexApiSample/MultisequenceLearning.cs) class in NeoCortex API for training our HTM Engine. We are going to start by reading and using data from both our training (learning) folder (present as numerical sequences in CSV Files in 'training' folder inside project directory) and predicting folder (present as numerical sequences in CSV Files in 'predicting' folder inside project directory) to train HTM Engine. For testing purposes, we are going to read numerical sequence data from predicting folder and remove the first few elements (essentially, making it subsequence of the original sequence; we already added anomalies in this data at random indexes), and then use it to detect anomalies.
+To train our HTM Engine, we used the [MultiSequenceLearning](https://github.com/ddobric/neocortexapi/blob/master/source/Samples/NeoCortexApiSample/MultisequenceLearning.cs) class in the NeoCortex API. Firstly, we will read and train the HTM Engine using the data from both our training (learning) and predicting (predictive) folders, which are present as numerical sequences in CSV files in the 'training' and 'predicting' folders inside the project directory. We will read numerical sequence data from the prediction folder for testing purposes, remove the first few elements (thus effectively turning the data into a subsequence of the original sequence; we have already inserted anomalies at random indexes into this data), and then use it to detect anomalies.
 
-Please note that all files are read with .csv extension inside the folders, and exception handlers are in place if the format of the files are not in proper order.
+Please take note that all files inside the folders are read with the.csv extension, and exception handlers are set up in case the file format is incorrect.
 
-For this project, we are using artificial integer sequence data of network load (rounded off to nearest integer, in precentage), which are stored inside the csv files. Example of a csv file within training folder.
+We are employing artificial integer sequence data of network load for this project, which is saved inside of CSV files and is rounded off to the nearest integer, in percentage. Example of a csv file within training folder.
 
 ```
 69,72,75,68,72,67,66,70,72,67
@@ -39,15 +39,26 @@ For this project, we are using artificial integer sequence data of network load 
 68,74,75,68,72,67,66,70,69,65
 71,74,75,68,72,67,66,70,69,65
 ```
-Normally, the values stay within the range of 65 to 75. For testing, we consider anything outside this range to be an anomaly. We have uploaded the anomaly results of our data in this repository for reference. 
+Normally, the values stay within the range of 65 to 75. All values outside of this range are considered anomalies for testing purposes. However, in order to identify anomalies, we have a csv file in the predicting folder. Typically, some of the data in this file does not fall within 65 and 75. 
+
+```
+71,74,98,68,92,65,66,70,69,65
+71,74,75,68,72,65,66,30,69,35
+.............................
+.............................
+71,74,75,71,72,65,36,70,69,65
+71,75,75,71,72,65,66,70,98,95
+```
+We have uploaded the anomaly results of our data in this repository for reference.
 
 1. output result of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output).
 
 ## Execution of the project
 
-Our project is executed in the following way. 
+The following is how our project is carried out.
+ 
 
-* In the beginning, we have ExtractSequencesFromFolder method of [CsvSequenceFolder](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/CSVFolderReader.cs) class to read all the files placed inside a folder. These classes store the read sequences to a list of numeric sequences, which will be used in a number of occasions later. These classes have exception handling implemented inside for handling non-numeric data. Data can be trimmed using Trimsequences method. It trims one to four elements(Number 1 to 4 is decided randomly) from the beginning of a numeric sequence and returns it.
+* In the beginning, we have ExtractSequencesFromFolder method of [CsvSequenceFolder](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/CsvSequenceFolder.cs) class to read all the files placed inside a folder. These classes keep track of the read sequences in a list of numerical sequences that will be used repeatedly in the future. To handle non-numeric data, some classes have incorporated exception handling inside. With the Trimsequences technique, data can be trimmed. It returns a numeric sequence after trimming one to four components (numbers 1 through 4) from the start.
 
 ```csharp
  public List<List<double>> ExtractSequencesFromFolder()
@@ -63,7 +74,8 @@ public static List<List<double>> TrimSequences(List<List<double>> sequences)
         }
 ```
 
-* After that, the method ConvertToHTMInput of [CSVToHTMInputConverter](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/CSVToHTMInput.cs) class is there which converts all the read sequences to a format suitable for HTM training.
+* After that, the method ConvertToHTMInput of [CSVToHTMInputConverter](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/CSVToHTMInputConverter.cs) class is there which converts all the read sequences to a format suitable for HTM training.
+
 ```csharp
 Dictionary<string, List<double>> dictionary = new Dictionary<string, List<double>>();
 for (int i = 0; i < sequences.Count; i++)
@@ -75,7 +87,7 @@ for (int i = 0; i < sequences.Count; i++)
     }
      return dictionary;
 ```
-* After that, we have ExecuteHTMModelTraining method of [HTMTrainingManager](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/HTMModeltraining.cs) class to train our model using the converted sequences. The numerical data sequences from training (for learning) and predicting folders are combined before training the HTM engine. This class returns our trained model object predictor.
+* After that, we have ExecuteHTMModelTraining method of [HTMTrainingManager](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMTrainingManager.cs) class to train our model using the converted sequences. The numerical data sequences from training (for learning) and predicting folders are combined before training the HTM engine. This class returns our trained model object predictor.
 ```csharp
 .....
 MultiSequenceLearning learning = new MultiSequenceLearning();
@@ -86,7 +98,8 @@ List<List<double>> combinedSequences = new List<List<double>>(sequences1);
 combinedSequences.AddRange(sequences2);
 .....
 ```
-* In the end, we use [HTMAnomalyExperiment]to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CSVFileReader), combining and converting them for HTM training (CSVToHTMInput) and training the HTM engine (using HTMModelTraining) will be used here. We use the same class (CSVFolderReader) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
+* In the end, we use [HTMAnomalyExperiment](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMAnomalyExperiment.cs)to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CSVFileReader), combining and converting them for HTM training (CSVToHTMInput) and training the HTM engine (using HTMModelTraining) will be used here. We use the same class (CSVFolderReader) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
+
 ```csharp
 .....
 CSVFolderReader testseq = new CSVFolderReader(_predictingCSVFolderPath);
@@ -149,14 +162,15 @@ We use anomalyscore (difference ratio) for comparison with our already preset th
 To run this project, use the following class/methods given in [Program.cs].
 
 ```csharp
- HTMAnomalyTesting tester = new HTMAnomalyTesting();
- tester.Run();
+HTMAnomalyExperiment tester = new HTMAnomalyExperiment();
+tester.ExecuteExperiment();
 ```
+
 ### Encoding:
 
-Encoding of our input data is very important, such that it can be processed by our HTM Engine. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/Encoders.md). 
+It is crucial that our input data be encoded so that our HTM Engine can process it. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/Encoders.md). 
 
-As we are going to train and test data between the range of integer values between 0-100 with no periodicity, we are using the following settings. Minimum and maximum values are set to 0 and 100 respectively, as we are expecting all the values to be in this range only. In other used cases, these values need to be changed.
+We are utilizing the following settings since we will be training and testing data that falls between the range of integer values between 0-100 without any periodicity. Since we only expect values to fall inside this range, the minimum and maximum values are set to 0 and 100, respectively. These numbers must be adjusted for other usage scenarios.
 
 ```csharp
 
@@ -195,7 +209,7 @@ Dictionary<string, object> settings = new Dictionary<string, object>()
 
 ### HTM Configuration:
 
-We have used the following configuration. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/SpatialPooler.md#parameter-desription)
+The configuration that we have used is as follows. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/SpatialPooler.md#parameter-desription)
 
 ```csharp
 {
@@ -227,9 +241,10 @@ We have used the following configuration. More on [this](https://github.com/ddob
 
 ### Multisequence learning
 
-The [RunExperiment](https://github.com/SouravPaulSumit/Team_anomaly/blob/be27813af65f611df7cbd33009d72a3ee72e3756/mySEProject/AnomalyDetectionSample/multisequencelearning.cs#L75) method inside the [multisequencelearning](https://github.com/SouravPaulSumit/Team_anomaly/blob/master/mySEProject/AnomalyDetectionSample/multisequencelearning.cs) class file demonstrates how multisequence learning works. To summarize, 
+The [multisequencelearning](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs) class file's [RunExperiment](https://github.com/mahbubur-r/neocortexapi/blob/34299872fcd5cdb30e6ab5fa41f8d46a19e6331e/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L74) method provides an example of how multisequence learning functions. As a summary,
 
-* HTM Configuration is taken and memory of connections are initialized. After that, HTM Classifier, Cortex layer and HomeostaticPlasticityController are initialized.
+* Initialization of connection memory and HTM configuration are performed. The HTM Classifier, Cortex layer, and Homeostatic Plasticity Controller are then initialized.
+
 ```csharp
 .......
 var mem = new Connections(cfg);
@@ -241,14 +256,16 @@ HomeostaticPlasticityController hpc = new HomeostaticPlasticityController(mem, n
 .......
 ```
 
-* After that, Spatial Pooler and Temporal Memory is initialized.
+* Following that, Temporal Memory and Spatial Pooler are initialized.
+
 ```csharp
 .....
 TemporalMemory tm = new TemporalMemory();
 SpatialPoolerMT sp = new SpatialPoolerMT(hpc);
 .....
 ```
-* After that, spatial pooler memory is added to cortex layer and trained for maximum number of cycles.
+* The cortical layer is then added with spatial pooler memory, which is trained for the maximum number of cycles.
+
 ```csharp
 .....
 layer1.HtmModules.Add("sp", sp);
@@ -256,7 +273,8 @@ int maxCycles = 3500;
 for (int i = 0; i < maxCycles && isInStableState == false; i++)
 .....
 `````
-* After that, temporal memory is added to cortex layer to learn all the input sequences.
+* In order to learn every input sequence, temporal memory is then introduced to the cortical layer.
+
 ```csharp
 .....
 layer1.HtmModules.Add("tm", tm);
@@ -265,19 +283,36 @@ foreach (var sequenceKeyPair in sequences){
 }
 .....
 ```
-* Finally, the trained cortex layer and HTM classifier is returned.
+* The HTM classifier and trained cortical layer are finally returned.
+
 ```csharp
 .....
 return new Predictor(layer1, mem, cls)
 .....
 `````
-We will use this for prediction in later parts of our project.
-
+In later stages of our project, we'll use this to make predictions.
 
  
 # Results
 
-After running this project, we got the following [output]
+Following the project's execution, we obtained the following results:
+
+```
+Testing the sequence for anomaly detection: 72, 67, 66, 90, 69, 97.
+
+Current element in the testing sequence: 72
+No anomaly detected in the next element. HTM Engine found similarity: 95.83%.
+Current element in the testing sequence: 67
+No anomaly detected in the next element. HTM Engine found similarity: 83.33%.
+Current element in the testing sequence: 66
+****Anomaly detected**** in the next element. HTM Engine predicted: 70 with similarity: 100%, actual value: 90.
+Skipping to the next element in the testing sequence due to detected anomaly.
+Current element in the testing sequence: 69
+****Anomaly detected**** in the next element. HTM Engine predicted: 72 with similarity: 100%, actual value: 97.
+Skipping to the next element in the testing sequence due to detected anomaly.
+
+Average accuracy for this sequence: 63.19333333333333%.
+```
 
 We can observe that the accuracy rate is between 50% - 70%. It is desired that high accuracy should on the sequence is required in an anomaly detection program. Due to hardware specification of our machine, we unable to run the program with lots of cycle and sequence. However, accuracy can be improved by running more data sequence and cycle.
 
