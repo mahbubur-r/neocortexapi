@@ -1,5 +1,8 @@
 ﻿namespace AnomalyDetectionSample
 {
+    /// <summary>
+    /// Output result class
+    /// </summary>
     public static class StoredOutputValues
     {
         public static double TrainingTimeInSeconds { get; set; }

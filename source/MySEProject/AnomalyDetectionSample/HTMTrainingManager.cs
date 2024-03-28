@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace AnomalyDetectionSample
 {
+    /// <summary>
+    /// Executes the HTM model training experiment using sequence to return the trained model
+    /// </summary>
     public class HTMTrainingManager
     {
         /// <summary>
