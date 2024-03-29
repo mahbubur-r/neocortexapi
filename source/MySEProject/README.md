@@ -14,16 +14,12 @@ Visual Studio 2019 or later
 
 This project is based on NeoCortex API. More details [here](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/gettingStarted.md).
 
-***Summary of the Project:***
-This code is a C# console application that demonstrates a typical experiment for Spatial Pooling (SP) and Temporal Memory (TM) algorithms of NeoCortexApi library. The experiment reads sequences of numeric data from a CSV file, learns them using the SP and TM algorithms, and then predicts the next element of a randomly generated test sequence. The code also shows how to detect anomalies in the test sequence using the Anomaly Detector.
-
-
-# Introduction:
+# Summary of the Project:
 
 HTM (Hierarchical Temporal Memory) is a machine learning algorithm that processes time-series data in a distributed manner using a hierarchical network of nodes. Each nodes, or columns, can be trained to learn, and recognize patterns in input data. This can be used in identifying anomalies/deviations from normal patterns. It is a promising method for predicting and detecting anomalies in a range of applications. In this project, we will train our HTM Engine using the multisequencelearning class in the NeoCortex API, and then use the trained engine to learn patterns and identify anomalies. Specifically, numerical sequences will be read from various CSV files inside a folder in order to create an anomaly detection system.  
 
 
-# Details
+# Project Description
 
 To train our HTM Engine, we used the [MultiSequenceLearning](https://github.com/ddobric/neocortexapi/blob/master/source/Samples/NeoCortexApiSample/MultisequenceLearning.cs) class in the NeoCortex API. Firstly, we will read and train the HTM Engine using the data from both our training (learning) and predicting (predictive) folders, which are present as numerical sequences in CSV files in the 'training' and 'predicting' folders inside the project directory. We will read numerical sequence data from the prediction folder for testing purposes, remove the first few elements (thus effectively turning the data into a subsequence of the original sequence; we have already inserted anomalies at random indexes into this data), and then use it to detect anomalies.
 
@@ -34,8 +30,6 @@ We are employing artificial integer sequence data of network load for this proje
 ```
 69,72,75,68,72,67,66,70,72,67
 69,72,75,68,72,67,66,70,69,67
-.............................
-.............................
 68,74,75,68,72,67,66,70,69,65
 71,74,75,68,72,67,66,70,69,65
 ```
@@ -44,8 +38,6 @@ Normally, the values stay within the range of 65 to 75. All values outside of th
 ```
 71,74,98,68,92,65,66,70,69,65
 71,74,75,68,72,65,66,30,69,35
-.............................
-.............................
 71,74,75,71,72,65,36,70,69,65
 71,75,75,71,72,65,66,70,98,95
 ```
@@ -166,95 +158,22 @@ HTMAnomalyExperiment tester = new HTMAnomalyExperiment();
 tester.ExecuteExperiment();
 ```
 
-### Encoding:
+### HTM Engine Settings:
 
 It is crucial that our input data be encoded so that our HTM Engine can process it. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/Encoders.md). 
 
-We are utilizing the following settings since we will be training and testing data that falls between the range of integer values between 0-100 without any periodicity. Since we only expect values to fall inside this range, the minimum and maximum values are set to 0 and 100, respectively. These numbers must be adjusted for other usage scenarios.
-
-```csharp
-
-int inputBits = 121;
-int numColumns = 1210;
-.......................
-.......................
-double max = 100;
-
-Dictionary<string, object> settings = new Dictionary<string, object>()
-            {
-                { "W", 21},
-                ...........
-                { "MinVal", 0.0},
-                ...........
-                { "MaxVal", max}
-            };
- ```
+We are utilizing the following settings since we will be training and testing data that falls between the range of integer values between 0-100 without any periodicity. Since we only expect values to fall inside this range, the minimum and maximum values are set to 0 and 100, respectively. These numbers must be adjusted for other usage scenarios. More on [this](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L22-L64)
  
- Complete settings:
- 
- ```csharp
-
-Dictionary<string, object> settings = new Dictionary<string, object>()
-            {
-                { "W", 21},
-                { "N", inputBits},
-                { "Radius", -1.0},
-                { "MinVal", 0.0},
-                { "Periodic", false},
-                { "Name", "integer"},
-                { "ClipInput", false},
-                { "MaxVal", max}
-            };
-```
-
-### HTM Configuration:
+Complete settings is [here](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L54-L64)
 
 The configuration that we have used is as follows. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/SpatialPooler.md#parameter-desription)
-
-```csharp
-{
-                Random = new ThreadSafeRandom(42),
-
-                CellsPerColumn = 25,
-                GlobalInhibition = true,
-                LocalAreaDensity = -1,
-                NumActiveColumnsPerInhArea = 0.02 * numColumns,
-                PotentialRadius = (int)(0.15 * inputBits),
-                //InhibitionRadius = 15,
-
-                MaxBoost = 10.0,
-                DutyCyclePeriod = 25,
-                MinPctOverlapDutyCycles = 0.75,
-                MaxSynapsesPerSegment = (int)(0.02 * numColumns),
-
-                ActivationThreshold = 15,
-                ConnectedPermanence = 0.5,
-
-                // Learning is slower than forgetting in this case.
-                PermanenceDecrement = 0.25,
-                PermanenceIncrement = 0.15,
-
-                // Used by punishing of segments.
-                PredictedSegmentDecrement = 0.1
-};
-```
+HTM Configuration is [here](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L26-L50)
 
 ### Multisequence learning
 
 The [multisequencelearning](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs) class file's [RunExperiment](https://github.com/mahbubur-r/neocortexapi/blob/34299872fcd5cdb30e6ab5fa41f8d46a19e6331e/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L74) method provides an example of how multisequence learning functions. As a summary,
 
-* Initialization of connection memory and HTM configuration are performed. The HTM Classifier, Cortex layer, and Homeostatic Plasticity Controller are then initialized.
-
-```csharp
-.......
-var mem = new Connections(cfg);
-.......
-HtmClassifier<string, ComputeCycle> cls = new HtmClassifier<string, ComputeCycle>();
-CortexLayer<object, object> layer1 = new CortexLayer<object, object>("L1");
-HomeostaticPlasticityController hpc = new HomeostaticPlasticityController(mem, numUniqueInputs * 150, (isStable, numPatterns, actColAvg, seenInputs) => ..
-.......
-.......
-```
+* Initialization of connection memory and [HTM configuration](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L81) are performed. The [HTM Classifier](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L85), [Cortex layer](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L91), and [Homeostatic Plasticity Controller](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L96) are then initialized.
 
 * Following that, Temporal Memory and Spatial Pooler are initialized.
 
@@ -283,19 +202,14 @@ foreach (var sequenceKeyPair in sequences){
 }
 .....
 ```
-* The HTM classifier and trained cortical layer are finally returned.
-
-```csharp
-.....
-return new Predictor(layer1, mem, cls)
-.....
-`````
-In later stages of our project, we'll use this to make predictions.
+* The HTM classifier and trained cortical layer are finally returned. More [here](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L298)
 
  
 # Results
 
-Following the project's execution, we obtained the following results:
+Following the project's execution, we obtained the following [Outputs](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output)
+
+One testing sequence for anomaly detection and average accuracy for this sequence given below:
 
 ```
 Testing the sequence for anomaly detection: 72, 67, 66, 90, 69, 97.
