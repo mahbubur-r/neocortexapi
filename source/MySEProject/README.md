@@ -90,13 +90,13 @@ List<List<double>> combinedSequences = new List<List<double>>(sequences1);
 combinedSequences.AddRange(sequences2);
 .....
 ```
-* In the end, we use [HTMAnomalyExperiment](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMAnomalyExperiment.cs)to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CSVFileReader), combining and converting them for HTM training (CSVToHTMInput) and training the HTM engine (using HTMModelTraining) will be used here. We use the same class (CSVFolderReader) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
+* In the end, we use [HTMAnomalyExperiment](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMAnomalyExperiment.cs)to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CsvSequenceFolder), combining and converting them for HTM training (CSVToHTMInputConverter) and training the HTM engine (using HTMTrainingManager) will be used here. We use the same class (CsvSequenceFolder) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
 
 ```csharp
 .....
-CSVFolderReader testseq = new CSVFolderReader(_predictingCSVFolderPath);
-var inputtestseq = testseq.ExtractSequencesFromFolder();
-var triminputtestseq = CSVFolderReader.TrimSequences(inputtestseq);
+CsvSequenceFolder testSequencesReader = new CsvSequenceFolder(_predictingCSVFolderPath);
+var inputSequences = testSequencesReader.ExtractSequencesFromFolder();
+var trimmedInputSequences = CsvSequenceFolder.TrimSequences(inputSequences);
 .....
 ```
 Path to training and predicting folder is set as default and passed on the constructor, or can be set inside the class manually.
