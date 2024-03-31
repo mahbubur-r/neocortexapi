@@ -228,6 +228,51 @@ Skipping to the next element in the testing sequence due to detected anomaly.
 Average accuracy for this sequence: 63.19333333333333%.
 ```
 
+```
+Testing the sequence for anomaly detection: 75, 71, 72, 65, 66, 70, 98, 95.
+
+Current element in the testing sequence: 75
+No anomaly detected in the next element. HTM Engine found similarity: 100%.
+Current element in the testing sequence: 71
+Nothing predicted from HTM Engine. Anomaly detection failed.
+Current element in the testing sequence: 72
+No anomaly detected in the next element. HTM Engine found similarity: 61.67%.
+Current element in the testing sequence: 65
+Nothing predicted from HTM Engine. Anomaly detection failed.
+Current element in the testing sequence: 66
+No anomaly detected in the next element. HTM Engine found similarity: 92.59%.
+Current element in the testing sequence: 70
+****Anomaly detected**** in the next element. HTM Engine predicted: 72 with similarity: 87.5%, actual value: 98.
+Skipping to the next element in the testing sequence due to detected anomaly.
+Current element in the testing sequence: 95
+Nothing predicted from HTM Engine. Anomaly detection failed.
+
+Average accuracy for this sequence: 42.72%.
+
+------------------------------
+------------------------------
+
+Testing the sequence for anomaly detection: 75, 68, 72, 67, 66, 99, 72, 67.
+
+Current element in the testing sequence: 75
+No anomaly detected in the next element. HTM Engine found similarity: 100%.
+Current element in the testing sequence: 68
+No anomaly detected in the next element. HTM Engine found similarity: 100%.
+Current element in the testing sequence: 72
+No anomaly detected in the next element. HTM Engine found similarity: 70.83%.
+Current element in the testing sequence: 67
+No anomaly detected in the next element. HTM Engine found similarity: 91.67%.
+Current element in the testing sequence: 66
+****Anomaly detected**** in the next element. HTM Engine predicted: 70 with similarity: 100%, actual value: 99.
+Skipping to the next element in the testing sequence due to detected anomaly.
+Current element in the testing sequence: 72
+Nothing predicted from HTM Engine. Anomaly detection failed.
+Current element in the testing sequence: 67
+End of sequence. Further anomaly testing cannot be continued.
+
+Average accuracy for this sequence: 57.8125%.
+```
+
 As we can see, the accuracy rate ranges from 50% to 70%. In an anomaly detection algorithm, a high degree of accuracy on the sequence is desired. Our machine's hardware specifications prevent us from running programs with a lot of cycles and sequences. Nevertheless, by executing more data sequence and cycle, accuracy can be increased.
 
 On the other hand, a variety of factors come into play, such as the quantity and quality of the data, as well as the hyperparameters that are used to tune and train the model. To achieve the best results, more data should be used for training, and the hyperparameters should be further adjusted to find the most ideal setting for training. Due to scheduling and processing limitations, we used fewer numerical sequences as data to illustrate our sample project, but this might be changed if we made greater use of resources, such as the cloud.
