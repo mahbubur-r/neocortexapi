@@ -45,13 +45,14 @@ We have uploaded the anomaly results of our data in this repository for referenc
 
 1. output result of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output).
 
+```mermaid
 graph TD;
     StartProject --> ExtractSequences;
     ExtractSequences --> ConvertSequences;
     ConvertSequences --> TrainModel;
     TrainModel --> AnomalyDetection;
     AnomalyDetection --> StoreOutput;
-
+```
 
   Project Workflow:
 
