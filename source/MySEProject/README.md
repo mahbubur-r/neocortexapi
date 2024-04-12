@@ -47,7 +47,7 @@ We have uploaded the anomaly results of our data in this repository for referenc
 
 Project representation of flowchart:
 
-   +-------------------------+
+      +-------------------------+
    |     Start Project       |
    +-------------------------+
               |
