@@ -47,41 +47,25 @@ We have uploaded the anomaly results of our data in this repository for referenc
 
 Project representation of flowchart:
 
-      +-------------------------+
-   |     Start Project       |
-   +-------------------------+
-              |
-              v
-   +-------------------------+
-   | Extract Sequences       |
-   | From Folder             |
-   +-------------------------+
-              |
-              v
-   +-------------------------+
-   | Convert Sequences for   |
-   | HTM Training            |
-   +-------------------------+
-              |
-              v
-   +-------------------------+
-   | Train Model for         |
-   | Converted Sequences     |
-   +-------------------------+
-              |
-              v
-   +-------------------------+
-   | Anomaly Detection       |
-   | Based on Predicting    |
-   | Folder Sequence         |
-   +-------------------------+
-              |
-              v
-   +-------------------------+
-   | Store Anomaly Output    |
-   | in Text File            |
-   +-------------------------+
+  Project Workflow:
 
+1. **Start Project**
+    - Begin the project execution.
+
+2. **Extract Sequences From Folder**
+    - Extract sequences from the designated folder for further processing.
+
+3. **Convert Sequences for HTM Training**
+    - Convert the extracted sequences into a format suitable for Hierarchical Temporal Memory (HTM) training.
+
+4. **Train Model for Converted Sequences**
+    - Train the HTM model using the converted sequences.
+
+5. **Anomaly Detection Based on Predicting Folder Sequence**
+    - Perform anomaly detection based on the sequences from the predicting folder.
+
+6. **Store Anomaly Output in Text File**
+    - Store the output of anomaly detection in a text file for further analysis or reporting purposes.
 
 ## Execution of the project
 
