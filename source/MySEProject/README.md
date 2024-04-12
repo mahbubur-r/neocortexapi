@@ -45,6 +45,44 @@ We have uploaded the anomaly results of our data in this repository for referenc
 
 1. output result of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output).
 
+Project representation of flowchart:
+
+   +-------------------------+
+   |     Start Project       |
+   +-------------------------+
+              |
+              v
+   +-------------------------+
+   | Extract Sequences       |
+   | From Folder             |
+   +-------------------------+
+              |
+              v
+   +-------------------------+
+   | Convert Sequences for   |
+   | HTM Training            |
+   +-------------------------+
+              |
+              v
+   +-------------------------+
+   | Train Model for         |
+   | Converted Sequences     |
+   +-------------------------+
+              |
+              v
+   +-------------------------+
+   | Anomaly Detection       |
+   | Based on Predicting    |
+   | Folder Sequence         |
+   +-------------------------+
+              |
+              v
+   +-------------------------+
+   | Store Anomaly Output    |
+   | in Text File            |
+   +-------------------------+
+
+
 ## Execution of the project
 
 The following is how our project is carried out.
