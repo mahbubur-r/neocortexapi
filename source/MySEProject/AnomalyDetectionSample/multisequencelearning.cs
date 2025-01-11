@@ -12,15 +12,11 @@ namespace AnomalyDetectionSample
     /// </summary>
     public class MultiSequenceLearning
     {
-        /// <summary>
-        /// Runs the learning of sequences.
-        /// </summary>
-        /// <param name="sequences">Dictionary of sequences. KEY is the sequence name, the VALUE is the list of element of the sequence.</param>
         public Predictor Run(Dictionary<string, List<double>> sequences)
         {
 
-            int inputBits = 121;
-            int numColumns = 1210;
+            int inputBits = 50;
+            int numColumns = 1010;
 
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
@@ -92,7 +88,6 @@ namespace AnomalyDetectionSample
 
             TemporalMemory tm = new TemporalMemory();
 
-            // For more information see following paper: https://www.scitepress.org/Papers/2021/103142/103142.pdf
             HomeostaticPlasticityController hpc = new HomeostaticPlasticityController(mem, numUniqueInputs * 150, (isStable, numPatterns, actColAvg, seenInputs) =>
             {
                 if (isStable)
@@ -105,7 +100,6 @@ namespace AnomalyDetectionSample
                 // We are not learning in instable state.
                 isInStableState = isStable;
 
-                // Clear active and predictive cells.
                 //tm.Reset(mem);
             }, numOfCyclesToWaitOnChange: 50);
 
