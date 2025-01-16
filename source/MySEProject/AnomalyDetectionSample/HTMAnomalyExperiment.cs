@@ -12,12 +12,6 @@ namespace AnomalyDetectionSample
     /// </summary>
     public class HTMAnomalyExperiment
     {
-
-        /// <summary>
-        /// Initializes a new instance of the HTMAnomalyExperiment class with default folder paths.
-        /// </summary>
-        /// <param name="trainingFolderPath">The path to the training folder containing CSV files.</param>
-        /// <param name="predictingFolderPath">The path to the predicting folder containing CSV files.</param>
         public HTMAnomalyExperiment(string trainingFolderPath = "anomaly_training", string predictingFolderPath = "anomaly_predicting")
         {
             string projectBaseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
@@ -77,9 +71,9 @@ namespace AnomalyDetectionSample
 
         }
 
-        private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.2)
+        private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.1)
         {
-            if (sequence.Length < 3)
+            if (sequence.Length < 2)
             {
                 throw new ArgumentException($"Sequence must contain at least two values. Actual count: {sequence.Length}. Sequence: [{string.Join(",", sequence)}]");
             }

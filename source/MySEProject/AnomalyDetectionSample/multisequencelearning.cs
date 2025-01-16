@@ -19,8 +19,8 @@ namespace AnomalyDetectionSample
         public Predictor Run(Dictionary<string, List<double>> sequences)
         {
 
-            int inputBits = 110;
-            int numColumns = 1310;
+            int inputBits = 120;
+            int numColumns = 1210;
 
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
@@ -49,7 +49,7 @@ namespace AnomalyDetectionSample
                 PredictedSegmentDecrement = 0.2
             };
 
-            double max = 100;
+            double max = 120;
 
             Dictionary<string, object> settings = new Dictionary<string, object>()
             {
@@ -179,11 +179,6 @@ namespace AnomalyDetectionSample
                     matches = 0;
 
                     cycle++;
-
-                    Debug.WriteLine("");
-
-                    Debug.WriteLine($"-------------- Cycle {cycle} ---------------");
-                    Debug.WriteLine("");
 
                     foreach (var input in sequenceKeyPair.Value)
                     {
