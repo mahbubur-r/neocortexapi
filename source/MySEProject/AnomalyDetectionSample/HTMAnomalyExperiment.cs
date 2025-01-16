@@ -25,9 +25,7 @@ namespace AnomalyDetectionSample
             _predictingCSVFolderPath = Path.Combine(projectBaseDirectory, predictingFolderPath);
         }
 
-        /// <summary>
-        /// Executes the anomaly detection experiment using the HTM model.
-        /// </summary>
+ 
         public void ExecuteExperiment()
         {
 

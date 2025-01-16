@@ -19,8 +19,8 @@ namespace AnomalyDetectionSample
         public Predictor Run(Dictionary<string, List<double>> sequences)
         {
 
-            int inputBits = 121;
-            int numColumns = 1210;
+            int inputBits = 110;
+            int numColumns = 1310;
 
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
@@ -46,7 +46,7 @@ namespace AnomalyDetectionSample
                 PermanenceIncrement = 0.15,
 
                 // Used by punishing of segments.
-                PredictedSegmentDecrement = 0.1
+                PredictedSegmentDecrement = 0.2
             };
 
             double max = 100;
@@ -114,11 +114,7 @@ namespace AnomalyDetectionSample
             sp.Init(mem);
             tm.Init(mem);
 
-            // Please note that we do not add here TM in the layer.
-            // This is omitted for practical reasons, because we first eneter the newborn-stage of the algorithm
-            // In this stage we want that SP get boosted and see all elements before we start learning with TM.
-            // All would also work fine with TM in layer, but it would work much slower.
-            // So, to improve the speed of experiment, we first ommit the TM and then after the newborn-stage we add it to the layer.
+            
             layer1.HtmModules.Add("encoder", encoder);
             layer1.HtmModules.Add("sp", sp);
 
@@ -130,11 +126,8 @@ namespace AnomalyDetectionSample
 
             var lastPredictedValues = new List<string>(new string[] { "0" });
 
-            int maxCycles = 100;
+            int maxCycles = 120;
 
-            //
-            // Training SP to get stable. New-born stage.
-            //
 
             for (int i = 0; i < maxCycles && isInStableState == false; i++)
             {
