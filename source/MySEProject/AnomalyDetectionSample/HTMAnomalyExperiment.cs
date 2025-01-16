@@ -79,19 +79,9 @@ namespace AnomalyDetectionSample
 
         }
 
-        /// <summary>
-        /// Detects anomalies in the input list using the HTM trained model.
-        /// The anomaly score is calculated using a sliding window approach.
-        /// The difference between the predicted value and the actual value is used to calculate the anomaly score.
-        /// If the difference exceeds a certain tolerance set earlier, anomaly is detected.
-        /// Returns the result in a list of strings
-        /// </summary>
-        /// <param name="predictor">Trained HTM model, used for prediction.</param>
-        /// <param name="list">Input list which will be used to detect anomalies.</param>
-        /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
-        private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.1)
+        private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.2)
         {
-            if (sequence.Length < 2)
+            if (sequence.Length < 3)
             {
                 throw new ArgumentException($"Sequence must contain at least two values. Actual count: {sequence.Length}. Sequence: [{string.Join(",", sequence)}]");
             }
@@ -162,11 +152,6 @@ namespace AnomalyDetectionSample
 
             var averageSequenceAccuracy = currentAccuracy / sequence.Length;
 
-            resultOutputLines.Add("");
-            resultOutputLines.Add($"Average accuracy for this sequence: {averageSequenceAccuracy}%.");
-            resultOutputLines.Add("");
-            resultOutputLines.Add("------------------------------");
-
             _totalAccuracy += averageSequenceAccuracy;
             _iterationCount++;
 
@@ -174,17 +159,9 @@ namespace AnomalyDetectionSample
 
             return resultOutputLines;
         }
-        /// <summary>
-        /// Show output of anomalies in console
-        /// </summary>
-        /// <param name="predictor">Trained HTM model, used for prediction.</param>
-        /// <param name="list">Input list which will be used to detect anomalies.</param>
-        /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
+
         private void ShowOutputOnConsole(Predictor predictor, double[] sequence, double tolerance)
         {
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine($"Testing the sequence for anomaly detection: {string.Join(", ", sequence)}.");
 
             bool startFromFirst = true;
             double firstItem = sequence[0];
