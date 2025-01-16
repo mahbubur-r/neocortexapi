@@ -30,8 +30,6 @@ namespace AnomalyDetectionSample
         /// </summary>
         public void ExecuteExperiment()
         {
-            HTMTrainingManager htmModel = new HTMTrainingManager();
-            Predictor predictor;
 
             htmModel.ExecuteHTMModelTraining(_trainingCSVFolderPath, _predictingCSVFolderPath, out predictor);
 
@@ -79,8 +77,6 @@ namespace AnomalyDetectionSample
 
             StoredOutputValues.totalAvgAccuracy = _totalAccuracy / _iterationCount;
 
-            Console.WriteLine("Experiment results have been written to the text file.");
-            Console.WriteLine("Anomaly detection experiment completed.");
         }
 
         /// <summary>
