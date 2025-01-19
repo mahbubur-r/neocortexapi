@@ -37,6 +37,8 @@ namespace AnomalyDetectionSample
  
         public void ExecuteExperiment()
         {
+            HTMTrainingManager htmModel = new HTMTrainingManager();
+            Predictor predictor;
 
             htmModel.ExecuteHTMModelTraining(_trainingCSVFolderPath, _predictingCSVFolderPath, out predictor);
 
