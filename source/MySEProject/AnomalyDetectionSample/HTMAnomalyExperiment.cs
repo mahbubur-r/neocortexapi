@@ -10,23 +10,19 @@ namespace AnomalyDetectionSample
     /// This class is responsible for testing an HTM model.
     /// CSV files from both training(learning) and predicting folders will be used for training our HTM Model.
     /// </summary>
-    private readonly string _trainingCSVFolderPath;
-    private readonly string _predictingCSVFolderPath;
-    private static double _totalAccuracy = 0.0;
-    private static int _iterationCount = 0;
-    private readonly double _tolerance = 0.1;
-
-    /// <summary>
-    /// Initializes a new instance of the HTMAnomalyExperiment class with default folder paths.
-    /// </summary>
-    /// <param name="trainingFolderPath">The path to the training folder containing CSV files.</param>
-    /// <param name="predictingFolderPath">The path to the predicting folder containing CSV files.</param>
-    /// <summary>
-    /// This class is responsible for testing an HTM model.
-    /// CSV files from both training(learning) and predicting folders will be used for training our HTM Model.
-    /// </summary>
     public class HTMAnomalyExperiment
     {
+        private readonly string _trainingCSVFolderPath;
+        private readonly string _predictingCSVFolderPath;
+        private static double _totalAccuracy = 0.0;
+        private static int _iterationCount = 0;
+        private readonly double _tolerance = 0.1;
+
+        /// <summary>
+        /// Initializes a new instance of the HTMAnomalyExperiment class with default folder paths.
+        /// </summary>
+        /// <param name="trainingFolderPath">The path to the training folder containing CSV files.</param>
+        /// <param name="predictingFolderPath">The path to the predicting folder containing CSV files.</param>
         public HTMAnomalyExperiment(string trainingFolderPath = "anomaly_training", string predictingFolderPath = "anomaly_predicting")
         {
             string projectBaseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
@@ -34,13 +30,19 @@ namespace AnomalyDetectionSample
             _predictingCSVFolderPath = Path.Combine(projectBaseDirectory, predictingFolderPath);
         }
 
- 
+        /// <summary>
+        /// Executes the anomaly detection experiment using the HTM model.
+        /// </summary>
         public void ExecuteExperiment()
         {
             HTMTrainingManager htmModel = new HTMTrainingManager();
             Predictor predictor;
 
             htmModel.ExecuteHTMModelTraining(_trainingCSVFolderPath, _predictingCSVFolderPath, out predictor);
+
+            Console.WriteLine();
+            Console.WriteLine("Starting the anomaly detection experiment...");
+            Console.WriteLine();
 
             CsvSequenceFolder testSequencesReader = new CsvSequenceFolder(_predictingCSVFolderPath);
             var inputSequences = testSequencesReader.ExtractSequencesFromFolder();
@@ -86,8 +88,20 @@ namespace AnomalyDetectionSample
 
             StoredOutputValues.totalAvgAccuracy = _totalAccuracy / _iterationCount;
 
+            Console.WriteLine("Experiment results have been written to the text file.");
+            Console.WriteLine("Anomaly detection experiment completed.");
         }
 
+        /// <summary>
+        /// Detects anomalies in the input list using the HTM trained model.
+        /// The anomaly score is calculated using a sliding window approach.
+        /// The difference between the predicted value and the actual value is used to calculate the anomaly score.
+        /// If the difference exceeds a certain tolerance set earlier, anomaly is detected.
+        /// Returns the result in a list of strings
+        /// </summary>
+        /// <param name="predictor">Trained HTM model, used for prediction.</param>
+        /// <param name="list">Input list which will be used to detect anomalies.</param>
+        /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
         private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.1)
         {
             if (sequence.Length < 2)
@@ -161,6 +175,11 @@ namespace AnomalyDetectionSample
 
             var averageSequenceAccuracy = currentAccuracy / sequence.Length;
 
+            resultOutputLines.Add("");
+            resultOutputLines.Add($"Average accuracy for this sequence: {averageSequenceAccuracy}%.");
+            resultOutputLines.Add("");
+            resultOutputLines.Add("------------------------------");
+
             _totalAccuracy += averageSequenceAccuracy;
             _iterationCount++;
 
@@ -168,9 +187,17 @@ namespace AnomalyDetectionSample
 
             return resultOutputLines;
         }
-
+        /// <summary>
+        /// Show output of anomalies in console
+        /// </summary>
+        /// <param name="predictor">Trained HTM model, used for prediction.</param>
+        /// <param name="list">Input list which will be used to detect anomalies.</param>
+        /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
         private void ShowOutputOnConsole(Predictor predictor, double[] sequence, double tolerance)
         {
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine($"Testing the sequence for anomaly detection: {string.Join(", ", sequence)}.");
 
             bool startFromFirst = true;
             double firstItem = sequence[0];
