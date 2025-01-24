@@ -18,13 +18,7 @@ namespace AnomalyDetectionSample
         /// <param name="trainedPredictor">The trained model that will be used for prediction.</param>
         public void ExecuteHTMModelTraining(string trainingFolderPath, string predictionFolderPath, out Predictor trainedPredictor)
         {
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("Starting anomaly detection experiment!!");
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("HTM training initiated...................");
+  
 
             // Read numerical sequences from CSV files in the specified training folder
             CsvSequenceFolder trainingReader = new CsvSequenceFolder(trainingFolderPath);
@@ -50,12 +44,6 @@ namespace AnomalyDetectionSample
 
             stopwatch.Stop();
 
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("HTM training completed! Total training time: " + stopwatch.Elapsed.TotalSeconds + " seconds.");
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
         }
     }
 }
