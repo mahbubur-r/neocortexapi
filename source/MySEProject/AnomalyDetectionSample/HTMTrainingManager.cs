@@ -5,10 +5,18 @@ using System.Collections.Generic;
 
 namespace AnomalyDetectionSample
 {
-
+    /// <summary>
+    /// Executes the HTM model training experiment using sequence to return the trained model
+    /// </summary>
     public class HTMTrainingManager
     {
->
+        /// <summary>
+        /// Executes the HTM model training experiment using CSV files from specified folders and returns the trained predictor.
+        /// </summary>
+        /// <param name="trainingFolderPath">The path to the folder containing the CSV files used for training.</param>
+        /// <param name="predictionFolderPath">The path to the folder containing the CSV files used for prediction.</param>
+        /// <param name="trainedPredictor">The trained model that will be used for prediction.</param>
+
         public void ExecuteHTMModelTraining(string trainingFolderPath, string predictionFolderPath, out Predictor trainedPredictor)
         {
             Console.WriteLine("------------------------------");
@@ -19,6 +27,8 @@ namespace AnomalyDetectionSample
             Console.WriteLine();
             Console.WriteLine("HTM training initiated...................");
 
+            // Using Stopwatch to measure the total training time
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
             // Read numerical sequences from CSV files in the specified training folder
             CsvSequenceFolder trainingReader = new CsvSequenceFolder(trainingFolderPath);
@@ -50,7 +60,6 @@ namespace AnomalyDetectionSample
             Console.WriteLine("HTM training completed! Total training time: " + stopwatch.Elapsed.TotalSeconds + " seconds.");
             Console.WriteLine();
             Console.WriteLine("------------------------------");
-
         }
     }
 }
