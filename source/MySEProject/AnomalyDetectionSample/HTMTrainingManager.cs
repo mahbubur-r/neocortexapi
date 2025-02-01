@@ -19,13 +19,7 @@ namespace AnomalyDetectionSample
 
         public void ExecuteHTMModelTraining(string trainingFolderPath, string predictionFolderPath, out Predictor trainedPredictor)
         {
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("Starting anomaly detection experiment!!");
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("HTM training initiated...................");
+
 
             // Using Stopwatch to measure the total training time
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -54,12 +48,6 @@ namespace AnomalyDetectionSample
 
             stopwatch.Stop();
 
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("HTM training completed! Total training time: " + stopwatch.Elapsed.TotalSeconds + " seconds.");
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
         }
     }
 }
