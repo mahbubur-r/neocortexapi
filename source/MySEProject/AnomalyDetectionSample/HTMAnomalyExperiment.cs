@@ -40,6 +40,9 @@ namespace AnomalyDetectionSample
 
             htmModel.ExecuteHTMModelTraining(_trainingCSVFolderPath, _predictingCSVFolderPath, out predictor);
 
+            Console.WriteLine();
+            Console.WriteLine("Starting the anomaly detection experiment...");
+            Console.WriteLine();
 
             CsvSequenceFolder testSequencesReader = new CsvSequenceFolder(_predictingCSVFolderPath);
             var inputSequences = testSequencesReader.ExtractSequencesFromFolder();
