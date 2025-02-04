@@ -16,10 +16,15 @@ namespace AnomalyDetectionSample
         /// <param name="trainingFolderPath">The path to the folder containing the CSV files used for training.</param>
         /// <param name="predictionFolderPath">The path to the folder containing the CSV files used for prediction.</param>
         /// <param name="trainedPredictor">The trained model that will be used for prediction.</param>
-
         public void ExecuteHTMModelTraining(string trainingFolderPath, string predictionFolderPath, out Predictor trainedPredictor)
         {
-
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("Starting anomaly detection experiment!!");
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("HTM training initiated...................");
 
             // Using Stopwatch to measure the total training time
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -48,6 +53,12 @@ namespace AnomalyDetectionSample
 
             stopwatch.Stop();
 
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("HTM training completed! Total training time: " + stopwatch.Elapsed.TotalSeconds + " seconds.");
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
         }
     }
 }
