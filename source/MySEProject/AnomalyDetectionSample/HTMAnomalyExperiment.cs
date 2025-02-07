@@ -22,14 +22,7 @@ namespace AnomalyDetectionSample
         /// Initializes a new instance of the HTMAnomalyExperiment class with default folder paths.
         /// </summary>
         /// <param name="trainingFolderPath">The path to the training folder containing CSV files.</param>
-        /// <param name="predictingFolderPath">The path to the predicting folder containing CSV files.</param>
-        public HTMAnomalyExperiment(string trainingFolderPath = "anomaly_training", string predictingFolderPath = "anomaly_predicting")
-        {
-            string projectBaseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
-            _trainingCSVFolderPath = Path.Combine(projectBaseDirectory, trainingFolderPath);
-            _predictingCSVFolderPath = Path.Combine(projectBaseDirectory, predictingFolderPath);
-        }
-
+ 
         /// <summary>
         /// Executes the anomaly detection experiment using the HTM model.
         /// </summary>
@@ -102,21 +95,7 @@ namespace AnomalyDetectionSample
         /// <param name="predictor">Trained HTM model, used for prediction.</param>
         /// <param name="list">Input list which will be used to detect anomalies.</param>
         /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
-        private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.1)
-        {
-            if (sequence.Length < 2)
-            {
-                throw new ArgumentException($"Sequence must contain at least two values. Actual count: {sequence.Length}. Sequence: [{string.Join(",", sequence)}]");
-            }
-
-            foreach (double value in sequence)
-            {
-                if (double.IsNaN(value))
-                {
-                    throw new ArgumentException($"Sequence contains non-numeric values. Sequence: [{string.Join(",", sequence)}]");
-                }
-            }
-
+       
             List<string> resultOutputLines = new List<string>
             {
                 "------------------------------",
