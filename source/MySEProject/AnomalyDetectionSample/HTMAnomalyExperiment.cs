@@ -102,21 +102,7 @@ namespace AnomalyDetectionSample
         /// <param name="predictor">Trained HTM model, used for prediction.</param>
         /// <param name="list">Input list which will be used to detect anomalies.</param>
         /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
-        private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.1)
-        {
-            if (sequence.Length < 2)
-            {
-                throw new ArgumentException($"Sequence must contain at least two values. Actual count: {sequence.Length}. Sequence: [{string.Join(",", sequence)}]");
-            }
-
-            foreach (double value in sequence)
-            {
-                if (double.IsNaN(value))
-                {
-                    throw new ArgumentException($"Sequence contains non-numeric values. Sequence: [{string.Join(",", sequence)}]");
-                }
-            }
-
+       
             List<string> resultOutputLines = new List<string>
             {
                 "------------------------------",
