@@ -39,14 +39,7 @@ namespace AnomalyDetectionSample
 
             htmModel.ExecuteHTMModelTraining(_trainingCSVFolderPath, _predictingCSVFolderPath, out predictor);
 
-            Console.WriteLine();
-            Console.WriteLine("Starting the anomaly detection experiment...");
-            Console.WriteLine();
 
-            CsvSequenceFolder testSequencesReader = new CsvSequenceFolder(_predictingCSVFolderPath);
-            var inputSequences = testSequencesReader.ExtractSequencesFromFolder();
-            var trimmedInputSequences = CsvSequenceFolder.TrimSequences(inputSequences);
-            predictor.Reset();
 
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string outputFile = $"anomaly_output_{timestamp}.txt";
@@ -91,16 +84,6 @@ namespace AnomalyDetectionSample
             Console.WriteLine("Anomaly detection experiment completed.");
         }
 
-        /// <summary>
-        /// Detects anomalies in the input list using the HTM trained model.
-        /// The anomaly score is calculated using a sliding window approach.
-        /// The difference between the predicted value and the actual value is used to calculate the anomaly score.
-        /// If the difference exceeds a certain tolerance set earlier, anomaly is detected.
-        /// Returns the result in a list of strings
-        /// </summary>
-        /// <param name="predictor">Trained HTM model, used for prediction.</param>
-        /// <param name="list">Input list which will be used to detect anomalies.</param>
-        /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
         private List<string> DetectAnomaly(Predictor predictor, double[] sequence, double tolerance = 0.1)
         {
             if (sequence.Length < 2)

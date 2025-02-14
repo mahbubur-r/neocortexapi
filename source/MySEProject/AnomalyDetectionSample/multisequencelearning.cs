@@ -19,8 +19,8 @@ namespace AnomalyDetectionSample
         public Predictor Run(Dictionary<string, List<double>> sequences)
         {
 
-            int inputBits = 120;
-            int numColumns = 1310;
+            int inputBits = 121;
+            int numColumns = 1210;
 
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
