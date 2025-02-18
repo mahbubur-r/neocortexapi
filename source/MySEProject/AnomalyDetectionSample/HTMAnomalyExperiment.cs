@@ -15,8 +15,7 @@ namespace AnomalyDetectionSample
         private readonly string _trainingCSVFolderPath;
         private readonly string _predictingCSVFolderPath;
         private static double _totalAccuracy = 0.0;
-        private static int _iterationCount = 0;
-        private readonly double _tolerance = 0.1;
+    
 
         /// <summary>
         /// Initializes a new instance of the HTMAnomalyExperiment class with default folder paths.
@@ -127,8 +126,7 @@ namespace AnomalyDetectionSample
 
             for (int i = 0; i < sequence.Length; i++)
             {
-                var currentItem = sequence[i];
-                var predictionResult = predictor.Predict(currentItem);
+  
 
                 resultOutputLines.Add($"Current element in the testing sequence: {currentItem}");
 
@@ -171,11 +169,6 @@ namespace AnomalyDetectionSample
                 }
             }
 
-
-            resultOutputLines.Add("");
-            resultOutputLines.Add($"Average accuracy for this sequence: {averageSequenceAccuracy}%.");
-            resultOutputLines.Add("");
-            resultOutputLines.Add("------------------------------");
 
             _totalAccuracy += averageSequenceAccuracy;
             _iterationCount++;
