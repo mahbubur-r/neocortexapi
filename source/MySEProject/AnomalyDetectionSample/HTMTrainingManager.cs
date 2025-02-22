@@ -52,6 +52,7 @@ namespace AnomalyDetectionSample
             // HTM model training completed
 
             stopwatch.Stop();
+            Console.WriteLine();
 
             Console.WriteLine();
             Console.WriteLine("------------------------------");
