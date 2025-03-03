@@ -8,7 +8,7 @@ namespace AnomalyDetectionSample
     /// <summary>
     /// Executes the HTM model training experiment using sequence to return the trained model
     /// </summary>
-    public class HTMTrainingManager
+    public class HTMTrainingService
     {
         /// <summary>
         /// Executes the HTM model training experiment using CSV files from specified folders and returns the trained predictor.
@@ -16,7 +16,7 @@ namespace AnomalyDetectionSample
         /// <param name="trainingFolderPath">The path to the folder containing the CSV files used for training.</param>
         /// <param name="predictionFolderPath">The path to the folder containing the CSV files used for prediction.</param>
         /// <param name="trainedPredictor">The trained model that will be used for prediction.</param>
-        public void ExecuteHTMModelTraining(string trainingFolderPath, string predictionFolderPath, out Predictor trainedPredictor)
+        public void TrainModelWithHTM(string trainingFolderPath, string predictionFolderPath, out Predictor trainedPredictor)
         {
             Console.WriteLine("------------------------------");
             Console.WriteLine();
@@ -29,6 +29,21 @@ namespace AnomalyDetectionSample
             // Using Stopwatch to measure the total training time
             Stopwatch stopwatch = Stopwatch.StartNew();
 
+            trainedPredictor = HTMTrainingSteps(trainingFolderPath, predictionFolderPath);
+
+            stopwatch.Stop();
+
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("HTM training completed! Total training time: " + stopwatch.Elapsed.TotalSeconds + " seconds.");
+            Console.WriteLine();
+            Console.WriteLine("------------------------------");
+        }
+
+        private static Predictor HTMTrainingSteps(string trainingFolderPath, string predictionFolderPath)
+        {
+            Predictor trainedPredictor;
             // Read numerical sequences from CSV files in the specified training folder
             CsvSequenceFolder trainingReader = new CsvSequenceFolder(trainingFolderPath);
             var trainingSequences = trainingReader.ExtractSequencesFromFolder();
@@ -50,15 +65,7 @@ namespace AnomalyDetectionSample
             trainedPredictor = learningAlgorithm.Run(htmInput);
 
             // HTM model training completed
-
-            stopwatch.Stop();
-
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("HTM training completed! Total training time: " + stopwatch.Elapsed.TotalSeconds + " seconds.");
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
+            return trainedPredictor;
         }
     }
 }
