@@ -46,13 +46,22 @@ namespace AnomalyDetectionSample
                 PermanenceIncrement = 0.15,
 
                 // Used by punishing of segments.
-                PredictedSegmentDecrement = 0.2
+                PredictedSegmentDecrement = 0.1
             };
 
-            double max = 120;
+            double max = 100;
 
             Dictionary<string, object> settings = new Dictionary<string, object>()
-
+            {
+                { "W", 21},
+                { "N", inputBits},
+                { "Radius", -1.0},
+                { "MinVal", 0.0},
+                { "Periodic", false},
+                { "Name", "integer"},
+                { "ClipInput", false},
+                { "MaxVal", max}
+            };
 
             EncoderBase encoder = new ScalarEncoder(settings);
 
@@ -105,7 +114,11 @@ namespace AnomalyDetectionSample
             sp.Init(mem);
             tm.Init(mem);
 
-            
+            // Please note that we do not add here TM in the layer.
+            // This is omitted for practical reasons, because we first eneter the newborn-stage of the algorithm
+            // In this stage we want that SP get boosted and see all elements before we start learning with TM.
+            // All would also work fine with TM in layer, but it would work much slower.
+            // So, to improve the speed of experiment, we first ommit the TM and then after the newborn-stage we add it to the layer.
             layer1.HtmModules.Add("encoder", encoder);
             layer1.HtmModules.Add("sp", sp);
 
@@ -117,8 +130,11 @@ namespace AnomalyDetectionSample
 
             var lastPredictedValues = new List<string>(new string[] { "0" });
 
-            int maxCycles = 120;
+            int maxCycles = 100;
 
+            //
+            // Training SP to get stable. New-born stage.
+            //
 
             for (int i = 0; i < maxCycles && isInStableState == false; i++)
             {
@@ -170,6 +186,11 @@ namespace AnomalyDetectionSample
                     matches = 0;
 
                     cycle++;
+
+                    Debug.WriteLine("");
+
+                    Debug.WriteLine($"-------------- Cycle {cycle} ---------------");
+                    Debug.WriteLine("");
 
                     foreach (var input in sequenceKeyPair.Value)
                     {

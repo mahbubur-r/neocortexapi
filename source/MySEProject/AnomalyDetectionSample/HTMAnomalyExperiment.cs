@@ -175,7 +175,10 @@ namespace AnomalyDetectionSample
 
             var averageSequenceAccuracy = currentAccuracy / sequence.Length;
 
-
+            resultOutputLines.Add("");
+            resultOutputLines.Add($"Average accuracy for this sequence: {averageSequenceAccuracy}%.");
+            resultOutputLines.Add("");
+            resultOutputLines.Add("------------------------------");
 
             _totalAccuracy += averageSequenceAccuracy;
             _iterationCount++;
@@ -192,7 +195,9 @@ namespace AnomalyDetectionSample
         /// <param name="tolerance">Tolerance value ratio can be overloaded from outside. Default is 0.1</param>
         private void ShowOutputOnConsole(Predictor predictor, double[] sequence, double tolerance)
         {
-     
+            Console.WriteLine("------------------------------");
+            Console.WriteLine();
+            Console.WriteLine($"Testing the sequence for anomaly detection: {string.Join(", ", sequence)}.");
 
             bool startFromFirst = true;
             double firstItem = sequence[0];
@@ -204,7 +209,10 @@ namespace AnomalyDetectionSample
 
             if (secondItemRes.Count > 0)
             {
-
+                var stokens = secondItemRes.First().PredictedInput.Split('_');
+                var stokens2 = secondItemRes.First().PredictedInput.Split('-');
+                var stokens3 = secondItemRes.First().Similarity;
+                var stokens4 = stokens2.Reverse().ElementAt(2);
                 double predictedFirstItem = double.Parse(stokens4);
                 var firstAnomalyScore = Math.Abs(predictedFirstItem - firstItem);
                 var firstDeviation = firstAnomalyScore / firstItem;
@@ -237,7 +245,8 @@ namespace AnomalyDetectionSample
                 if (res.Count > 0)
                 {
                     var tokens = res.First().PredictedInput.Split('_');
-  
+                    var tokens2 = res.First().PredictedInput.Split('-');
+                    var tokens3 = res.First().Similarity;
 
                     if (i < sequence.Length - 1)
                     {
