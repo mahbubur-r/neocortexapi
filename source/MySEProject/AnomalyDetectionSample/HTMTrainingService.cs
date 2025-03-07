@@ -6,66 +6,90 @@ using System.Collections.Generic;
 namespace AnomalyDetectionSample
 {
     /// <summary>
-    /// Executes the HTM model training experiment using sequence to return the trained model
+    /// Handles the training of an HTM model using sequence data from CSV files.
     /// </summary>
     public class HTMTrainingService
     {
         /// <summary>
-        /// Executes the HTM model training experiment using CSV files from specified folders and returns the trained predictor.
+        /// Trains an HTM model using CSV files and returns the trained predictor.
         /// </summary>
-        /// <param name="trainingFolderPath">The path to the folder containing the CSV files used for training.</param>
-        /// <param name="predictionFolderPath">The path to the folder containing the CSV files used for prediction.</param>
-        /// <param name="trainedPredictor">The trained model that will be used for prediction.</param>
+        /// <param name="trainingFolderPath">The folder path containing training CSV files.</param>
+        /// <param name="predictionFolderPath">The folder path containing prediction CSV files.</param>
+        /// <param name="trainedPredictor">The output trained model used for prediction.</param>
         public void TrainModelWithHTM(string trainingFolderPath, string predictionFolderPath, out Predictor trainedPredictor)
         {
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("Starting anomaly detection experiment!!");
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("HTM training initiated...................");
+            Console.WriteLine("\n------------------------------");
+            Console.WriteLine("Starting HTM model training...");
+            Console.WriteLine("------------------------------\n");
 
-            // Using Stopwatch to measure the total training time
+            // Start stopwatch to measure training time
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            trainedPredictor = HTMTrainingSteps(trainingFolderPath, predictionFolderPath);
+            trainedPredictor = ExecuteTrainingSteps(trainingFolderPath, predictionFolderPath);
 
             stopwatch.Stop();
 
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
-            Console.WriteLine();
-            Console.WriteLine("HTM training completed! Total training time: " + stopwatch.Elapsed.TotalSeconds + " seconds.");
-            Console.WriteLine();
-            Console.WriteLine("------------------------------");
+            Console.WriteLine("\n------------------------------");
+            Console.WriteLine($"HTM training completed! Total training time: {stopwatch.Elapsed.TotalSeconds:F2} seconds.");
+            Console.WriteLine("------------------------------\n");
         }
 
-        private static Predictor HTMTrainingSteps(string trainingFolderPath, string predictionFolderPath)
+        /// <summary>
+        /// Executes the necessary steps for training an HTM model.
+        /// </summary>
+        /// <param name="trainingFolderPath">Path to the folder containing training sequences.</param>
+        /// <param name="predictionFolderPath">Path to the folder containing prediction sequences.</param>
+        /// <returns>The trained predictor model.</returns>
+        private static Predictor ExecuteTrainingSteps(string trainingFolderPath, string predictionFolderPath)
         {
-            Predictor trainedPredictor;
-            // Read numerical sequences from CSV files in the specified training folder
-            CsvSequenceFolder trainingReader = new CsvSequenceFolder(trainingFolderPath);
-            var trainingSequences = trainingReader.ExtractSequencesFromFolder();
+            // Load training sequences from CSV files
+            var trainingSequences = LoadSequencesFromFolder(trainingFolderPath);
 
-            // Read numerical sequences from CSV files in the specified prediction folder
-            CsvSequenceFolder predictionReader = new CsvSequenceFolder(predictionFolderPath);
-            var predictionSequences = predictionReader.ExtractSequencesFromFolder();
+            // Load prediction sequences from CSV files
+            var predictionSequences = LoadSequencesFromFolder(predictionFolderPath);
 
-            // Combine sequences from both training and prediction folders
+            // Combine both training and prediction sequences
             List<List<double>> combinedSequences = new List<List<double>>(trainingSequences);
             combinedSequences.AddRange(predictionSequences);
 
-            // Convert sequences to HTM input format
+            // Convert sequences to HTM-compatible input format
+            var htmInput = ConvertToHTMInput(combinedSequences);
+
+            // Train HTM model using multi-sequence learning algorithm
+            return TrainHTMModel(htmInput);
+        }
+
+        /// <summary>
+        /// Loads numerical sequences from CSV files in a given folder.
+        /// </summary>
+        /// <param name="folderPath">Path to the folder containing CSV files.</param>
+        /// <returns>A list of numerical sequences.</returns>
+        private static List<List<double>> LoadSequencesFromFolder(string folderPath)
+        {
+            CsvSequenceFolder sequenceReader = new CsvSequenceFolder(folderPath);
+            return sequenceReader.ExtractSequencesFromFolder();
+        }
+
+        /// <summary>
+        /// Converts a list of numerical sequences into an HTM-compatible format.
+        /// </summary>
+        /// <param name="sequences">The combined numerical sequences.</param>
+        /// <returns>The formatted HTM input.</returns>
+        private static HTMInput ConvertToHTMInput(List<List<double>> sequences)
+        {
             CSVToHTMInputConverter sequenceConverter = new CSVToHTMInputConverter();
-            var htmInput = sequenceConverter.ConvertToHTMInput(combinedSequences);
+            return sequenceConverter.ConvertToHTMInput(sequences);
+        }
 
-            // Start multi-sequence learning experiment to generate predictor model
+        /// <summary>
+        /// Trains an HTM model using the formatted input data.
+        /// </summary>
+        /// <param name="htmInput">HTM-compatible input data.</param>
+        /// <returns>A trained predictor model.</returns>
+        private static Predictor TrainHTMModel(HTMInput htmInput)
+        {
             MultiSequenceLearning learningAlgorithm = new MultiSequenceLearning();
-            trainedPredictor = learningAlgorithm.Run(htmInput);
-
-            // HTM model training completed
-            return trainedPredictor;
+            return learningAlgorithm.Run(htmInput);
         }
     }
 }
