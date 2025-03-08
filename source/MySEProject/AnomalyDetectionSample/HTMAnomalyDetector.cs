@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace AnomalyDetectionSample
 {
     /// <summary>
-    /// Responsible for executing the anomaly detection experiment using an HTM model.
+    /// Executes an anomaly detection experiment using an HTM model.
     /// </summary>
     public class HTMAnomalyDetector
     {
@@ -19,71 +18,61 @@ namespace AnomalyDetectionSample
         private readonly double _tolerance = 0.1;
 
         /// <summary>
-        /// Initializes a new instance of the HTMAnomalyDetector class with default folder paths.
+        /// Initializes a new instance of HTMAnomalyDetector with default folder paths.
         /// </summary>
-        /// <param name="trainingFolderPath">Path to the folder containing training CSV files.</param>
-        /// <param name="testingFolderPath">Path to the folder containing testing CSV files.</param>
         public HTMAnomalyDetector(string trainingFolderPath = "anomaly_training", string testingFolderPath = "anomaly_testing")
         {
-            string projectBaseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
-            _trainingDataPath = Path.Combine(projectBaseDirectory, trainingFolderPath);
-            _testingDataPath = Path.Combine(projectBaseDirectory, testingFolderPath);
+            string baseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
+            _trainingDataPath = Path.Combine(baseDirectory, trainingFolderPath);
+            _testingDataPath = Path.Combine(baseDirectory, testingFolderPath);
         }
 
         /// <summary>
-        /// Executes the HTM model training and anomaly detection experiments.
+        /// Runs the HTM model training and anomaly detection experiment.
         /// </summary>
         public void RunExperiment()
         {
             var htmTrainer = new HTMTrainingService();
-            Predictor trainedPredictor;
+            htmTrainer.TrainModelWithHTM(_trainingDataPath, _testingDataPath, out Predictor trainedPredictor);
 
-            htmTrainer.TrainModelWithHTM(_trainingDataPath, _testingDataPath, out trainedPredictor);
-
-            Console.WriteLine("\nStarting the anomaly detection experiment...\n");
-
-            var testSequences = LoadTestSequences(_testingDataPath);
+            Console.WriteLine("\nStarting anomaly detection experiment...\n");
             trainedPredictor.Reset();
 
+            var testSequences = LoadTestSequences(_testingDataPath);
             string outputFilePath = PrepareOutputFile();
 
-            List<string> experimentResults = DetectAnomaliesInSequences(trainedPredictor, testSequences);
-
-            SaveResultsToFile(experimentResults, outputFilePath);
+            List<string> results = DetectAnomalies(trainedPredictor, testSequences);
+            SaveResultsToFile(results, outputFilePath);
 
             StoredOutputValues.totalAvgAccuracy = _cumulativeAccuracy / _sequenceCount;
-
-            Console.WriteLine("Experiment results have been written to the text file.");
-            Console.WriteLine("Anomaly detection experiment completed.");
+            Console.WriteLine("Anomaly detection experiment completed. Results saved to file.");
         }
 
         /// <summary>
-        /// Loads test sequences from CSV files.
+        /// Loads numerical sequences from testing CSV files.
         /// </summary>
         private List<List<double>> LoadTestSequences(string folderPath)
         {
-            var testSequenceReader = new CsvSequenceFolder(folderPath);
-            var sequences = testSequenceReader.ExtractSequencesFromFolder();
-            return CsvSequenceFolder.TrimSequences(sequences);
+            var reader = new CsvSequenceFolder(folderPath);
+            return CsvSequenceFolder.TrimSequences(reader.ExtractSequencesFromFolder());
         }
 
         /// <summary>
-        /// Creates and returns the file path for saving output results.
+        /// Generates a unique output file for experiment results.
         /// </summary>
         private string PrepareOutputFile()
         {
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string outputFile = $"anomaly_output_{timestamp}.txt";
-            string projectBaseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
-            string outputFolderPath = Path.Combine(projectBaseDirectory, "output");
-            Directory.CreateDirectory(outputFolderPath);  // Ensure directory exists
-            return Path.Combine(outputFolderPath, outputFile);
+            string outputFolder = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName, "output");
+            Directory.CreateDirectory(outputFolder);
+            return Path.Combine(outputFolder, outputFile);
         }
 
         /// <summary>
-        /// Detects anomalies for each sequence and returns the results.
+        /// Detects anomalies in all test sequences and returns the results.
         /// </summary>
-        private List<string> DetectAnomaliesInSequences(Predictor predictor, List<List<double>> sequences)
+        private List<string> DetectAnomalies(Predictor predictor, List<List<double>> sequences)
         {
             var allResults = new List<string>();
 
@@ -91,116 +80,85 @@ namespace AnomalyDetectionSample
             {
                 try
                 {
-                    var results = DetectAnomaliesInSequence(predictor, sequence.ToArray(), _tolerance);
-                    allResults.AddRange(results);
+                    allResults.AddRange(ProcessSequence(predictor, sequence.ToArray()));
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine($"Exception caught: {ex.Message}");
+                    Console.WriteLine($"Sequence skipped due to error: {ex.Message}");
                 }
             }
-
             return allResults;
         }
 
         /// <summary>
-        /// Saves the experiment results to a text file.
+        /// Processes a single sequence and detects anomalies based on predictions.
         /// </summary>
-        private void SaveResultsToFile(List<string> results, string filePath)
-        {
-            File.WriteAllLines(filePath, results);
-        }
-
-        /// <summary>
-        /// Detects anomalies in a sequence using the trained HTM model.
-        /// </summary>
-        private List<string> DetectAnomaliesInSequence(Predictor predictor, double[] sequence, double tolerance)
+        private List<string> ProcessSequence(Predictor predictor, double[] sequence)
         {
             ValidateSequence(sequence);
-
-            var resultLines = new List<string>
-            {
-                "------------------------------",
-                $"Testing sequence: {string.Join(", ", sequence)}",
-                "------------------------------"
-            };
+            var resultLines = new List<string> { "------------------------------", $"Testing sequence: {string.Join(", ", sequence)}", "------------------------------" };
 
             double sequenceAccuracy = 0.0;
-
-            for (int i = 0; i < sequence.Length; i++)
+            for (int i = 0; i < sequence.Length - 1; i++)
             {
-                var currentValue = sequence[i];
-                var predictionResult = predictor.Predict(currentValue);
-
-                if (predictionResult.Count > 0)
-                {
-                    var predictedValue = ExtractPredictedValue(predictionResult.First().PredictedInput);
-                    var similarity = predictionResult.First().Similarity;
-
-                    if (i < sequence.Length - 1)
-                    {
-                        double nextValue = sequence[i + 1];
-                        if (IsAnomaly(predictedValue, nextValue, tolerance))
-                        {
-                            resultLines.Add($"Anomaly detected: Predicted {predictedValue}, Actual {nextValue}, Similarity {similarity}%");
-                            i++;
-                        }
-                        else
-                        {
-                            resultLines.Add($"No anomaly: Predicted {predictedValue}, Actual {nextValue}, Similarity {similarity}%");
-                        }
-
-                        sequenceAccuracy += similarity;
-                    }
-                    else
-                    {
-                        resultLines.Add("End of sequence reached.");
-                    }
-                }
-                else
+                var predictionResult = predictor.Predict(sequence[i]);
+                if (!predictionResult.Any())
                 {
                     resultLines.Add("Prediction failed.");
+                    continue;
                 }
+
+                double predictedValue = ExtractPredictedValue(predictionResult.First().PredictedInput);
+                double similarity = predictionResult.First().Similarity;
+                bool isAnomalous = IsAnomaly(predictedValue, sequence[i + 1]);
+
+                resultLines.Add(isAnomalous
+                    ? $"Anomaly detected: Predicted {predictedValue}, Actual {sequence[i + 1]}, Similarity {similarity}%"
+                    : $"No anomaly: Predicted {predictedValue}, Actual {sequence[i + 1]}, Similarity {similarity}%");
+
+                sequenceAccuracy += similarity;
             }
 
-            double averageAccuracy = sequenceAccuracy / sequence.Length;
-            _cumulativeAccuracy += averageAccuracy;
+            double avgAccuracy = sequenceAccuracy / (sequence.Length - 1);
+            _cumulativeAccuracy += avgAccuracy;
             _sequenceCount++;
 
-            resultLines.Add($"Average accuracy for sequence: {averageAccuracy}%");
+            resultLines.Add($"Average accuracy: {avgAccuracy}%");
             resultLines.Add("------------------------------");
-
             return resultLines;
         }
 
         /// <summary>
-        /// Validates the input sequence for length and numeric values.
+        /// Validates input sequence before anomaly detection.
         /// </summary>
         private void ValidateSequence(double[] sequence)
         {
-            if (sequence.Length < 2)
-                throw new ArgumentException("Sequence must contain at least two values.");
-
-            if (sequence.Any(double.IsNaN))
-                throw new ArgumentException("Sequence contains non-numeric values.");
+            if (sequence.Length < 2) throw new ArgumentException("Sequence must have at least two values.");
+            if (sequence.Any(double.IsNaN)) throw new ArgumentException("Sequence contains non-numeric values.");
         }
 
         /// <summary>
-        /// Extracts the predicted value from the prediction string.
+        /// Extracts the numerical predicted value from a string representation.
         /// </summary>
         private double ExtractPredictedValue(string prediction)
         {
-            var tokens = prediction.Split('-');
-            return double.Parse(tokens.Last());
+            return double.Parse(prediction.Split('-').Last());
         }
 
         /// <summary>
-        /// Determines if the difference between predicted and actual value exceeds tolerance.
+        /// Determines if a value is an anomaly based on deviation from prediction.
         /// </summary>
-        private bool IsAnomaly(double predictedValue, double actualValue, double tolerance)
+        private bool IsAnomaly(double predicted, double actual)
         {
-            var deviation = Math.Abs(predictedValue - actualValue) / actualValue;
-            return deviation > tolerance;
+            return Math.Abs(predicted - actual) / actual > _tolerance;
+        }
+
+        /// <summary>
+        /// Saves experiment results to a text file.
+        /// </summary>
+        private void SaveResultsToFile(List<string> results, string filePath)
+        {
+            File.WriteAllLines(filePath, results);
         }
     }
 }
