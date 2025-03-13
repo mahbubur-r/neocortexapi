@@ -1,20 +1,28 @@
-***Topic: ML23/24-08 Implement Anomaly Detection Sample***
+# ML 24/25-03 Implement Anomaly Detection Sample
 
-***Getting Started***
-To run this program, you need to have the following software installed on your machine:
+# Introduction: 
+Our project aims to develop an anomaly detection system using the NeoCortex API's MultiSequenceLearning class. The system trains an HTM engine by processing numerical sequences extracted from multiple JSON files within a designated folder. Once trained, the engine analyzes patterns in the data and effectively detects anomalies..
 
-Visual Studio 2019 or later
-.NET Framework 4.7.2 or later
+# Tools for the project:
 
-***Installing***
--Clone this repository or download the code as a zip file.
--Extract the zip file to a directory of your choice.
--Open the solution file NeoCortexApiSample.sln in Visual Studio.
--Build the solution by selecting Build Solution from the Build menu.
+1. .NET 8.0 SDK**  
+2. NuGet Packages:** NeoCortexApi (v1.1.4), XPlot.Plotly (v4.0.6)  
+3. IDE: Visual Studio Community 2022 / Visual Studio Code
 
-This project is based on NeoCortex API. More details [here](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/gettingStarted.md).
+# How to Use 
 
-## Summary of the Project:
+Follow these steps to run the project:  
+
+1. Install the .NET SDK.  
+2. Open the project in your preferred code editor or IDE (e.g., Visual Studio Community 2022).  
+3. Add the required NuGet packages to the project.  
+4. Place numerical sequence JSON files (datasets) in the designated folders within the project directory.  
+5. Run the command `dotnet run`, enter the required tolerance value, and press **Enter**.  
+6. The output will be displayed in the terminal, and a graph highlighting anomalies will open in your default browser.  
+
+This project utilizes the **NeoCortex API** for anomaly detection.More details [here](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/gettingStarted.md).
+
+## Project Summary:
 
 HTM (Hierarchical Temporal Memory) is a machine learning algorithm that processes time-series data in a distributed manner using a hierarchical network of nodes. Each nodes, or columns, can be trained to learn, and recognize patterns in input data. This can be used in identifying anomalies/deviations from normal patterns. It is a promising method for predicting and detecting anomalies in a range of applications. In this project, we will train our HTM Engine using the multisequencelearning class in the NeoCortex API, and then use the trained engine to learn patterns and identify anomalies. Specifically, numerical sequences will be read from various CSV files inside a folder in order to create an anomaly detection system.  
 
@@ -48,12 +56,12 @@ We have uploaded the anomaly results of our data in this repository for referenc
 Work process flow chart:
 
 ```mermaid
-graph LR;
-    StartProject --> ExtractSequences;
-    ExtractSequences --> ConvertSequences;
-    ConvertSequences --> TrainModel;
-    TrainModel --> AnomalyDetection;
-    AnomalyDetection --> StoreOutput;
+graph TD;
+    Start["🚀 Start Project"] --> |📂 Read JSON Data| ExtractSequences["📊 Extract Sequences"];
+    ExtractSequences --> |🔄 Process & Structure Data| ConvertSequences["🔁 Convert Sequences"];
+    ConvertSequences --> |🧠 Prepare HTM Input| TrainModel["📖 Train Model"];
+    TrainModel --> |📈 Identify Patterns| AnomalyDetection["⚠️ Anomaly Detection"];
+    AnomalyDetection --> |💾 Save Results & Generate Graph| StoreOutput["📊 Store Output"];
 ```
 
 
@@ -109,7 +117,7 @@ for (int i = 0; i < sequences.Count; i++)
     }
      return dictionary;
 ```
-* After that, we have ExecuteHTMModelTraining method of [HTMTrainingManager](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMTrainingManager.cs) class to train our model using the converted sequences. The numerical data sequences from training (for learning) and predicting folders are combined before training the HTM engine. This class returns our trained model object predictor.
+* After that, we have ExecuteHTMModelTraining method of [HTMTrainingService](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMTrainingService.cs) class to train our model using the converted sequences. The numerical data sequences from training (for learning) and predicting folders are combined before training the HTM engine. This class returns our trained model object predictor.
 ```csharp
 .....
 MultiSequenceLearning learning = new MultiSequenceLearning();
@@ -120,7 +128,7 @@ List<List<double>> combinedSequences = new List<List<double>>(sequences1);
 combinedSequences.AddRange(sequences2);
 .....
 ```
-* In the end, we use [HTMAnomalyExperiment](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMAnomalyExperiment.cs) to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CsvSequenceFolder), combining and converting them for HTM training (CSVToHTMInputConverter) and training the HTM engine (using HTMTrainingManager) will be used here. We use the same class (CsvSequenceFolder) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
+* In the end, we use [HTMAnomalyDetector](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/HTMAnomalyDetector.cs) to detected anomalies in sequences read from files inside predicting folder. All the classes explained earlier- CSV files reading (CsvSequenceFolder), combining and converting them for HTM training (CSVToHTMInputConverter) and training the HTM engine (using HTMTrainingManager) will be used here. We use the same class (CsvSequenceFolder) to read files for our predicting sequences. TrimSequences method is then used to trim sequences for anomaly testing. Method for trimming is already explained earlier.
 
 ```csharp
 .....
