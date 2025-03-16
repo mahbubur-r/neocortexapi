@@ -57,11 +57,13 @@ Work process flow chart:
 
 ```mermaid
 graph TD;
-    Start["🚀 Start Project"] --> |📂 Read JSON Data| ExtractSequences["📊 Extract Sequences"];
-    ExtractSequences --> |🔄 Process & Structure Data| ConvertSequences["🔁 Convert Sequences"];
-    ConvertSequences --> |🧠 Prepare HTM Input| TrainModel["📖 Train Model"];
-    TrainModel --> |📈 Identify Patterns| AnomalyDetection["⚠️ Anomaly Detection"];
-    AnomalyDetection --> |💾 Save Results & Generate Graph| StoreOutput["📊 Store Output"];
+    A["🚀 1. Start Project"] --> B["📂 2. Read JSON Data & Extract Sequences"];
+    B --> C["🔄 3. Process & Structure Data"];
+    C --> D["🧠 4. Prepare HTM Input"];
+    D --> E["📖 5. Train Model"];
+    E --> F["📈 6. Identify Patterns"];
+    F --> G["⚠️ 7. Detect Anomalies"];
+    G --> H["📊 8. Store & Display Output"];
 ```
 
 
@@ -245,27 +247,29 @@ foreach (var sequenceKeyPair in sequences){
  
 ## Results
 
-Following the project's execution, we obtained the following [Outputs](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output)
+The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
 
-One testing sequence for anomaly detection and average accuracy for this sequence given below:
+Output result files: [Link](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output)
 
-```
-Testing the sequence for anomaly detection: 72, 67, 66, 90, 69, 97.
+We have used around 20 sequences to learn the model. The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
 
-Current element in the testing sequence: 72
-No anomaly detected in the next element. HTM Engine found similarity: 95.83%.
-Current element in the testing sequence: 67
-No anomaly detected in the next element. HTM Engine found similarity: 83.33%.
-Current element in the testing sequence: 66
-****Anomaly detected**** in the next element. HTM Engine predicted: 70 with similarity: 100%, actual value: 90.
-Skipping to the next element in the testing sequence due to detected anomaly.
-Current element in the testing sequence: 69
-****Anomaly detected**** in the next element. HTM Engine predicted: 72 with similarity: 100%, actual value: 97.
-Skipping to the next element in the testing sequence due to detected anomaly.
+| Index |       Testing Sequence           | Learned Sequences | Tolerance Value | Avg. Accuracy |
+|-------|----------------------------------|-------------------|-----------------|---------------|
+| 1     | {71,74,98,68,92,65,66,70,69,65}  | 20                | 0.2             | 28.77 %       |
+| 2     | {71,74,75,68,72,65,66,30,69,35}  | 20                | 0.2             | 25.67 %       |
+| 3     | {71,74,75,71,72,65,36,70,69,65}  | 20                | 0.2             | 16.02 %       |
+| 4     | {71,75,75,71,72,65,66,70,98,95}  | 20                | 0.2             | 35.12 %       |
+| 5     | {69,72,75,68,72,67,66,99,72,67}  | 20                | 0.2             | 41.90 %       |
+| 6     | {69,72,75,68,72,67,66,90,69,97}  | 20                | 0.2             | 63.19 %       |
+| 7     | {69,74,75,68,72,67,66,92,68,100} | 20                | 0.2             | 41.86 %       |
+| 8     | {69,74,75,68,72,67,66,10,68,85}  | 20                | 0.2             | 50.10 %       |
+| 9     | {68,74,75,68,72,67,16,50,69,65}  | 20                | 0.2             | 39.29 %       |
+| 10    | {71,74,75,68,72,97,66,70,69,85}  | 20                | 0.2             | 33.45 %       |
 
-Average accuracy for this sequence: 63.19333333333333%.
-```
+Upon completion of the experiment, the anomaly detection results are displayed on the screen, along with the HTM accuracy for each individual number sequence and the overall HTM accuracy for the entire experiment. Once the experiment is finished, a plotted graph automatically opens in the default browser, highlighting anomalies in the numerical sequence data from the predicting folder with red dots.
 
-As we can see, the accuracy rate ranges from 50% to 70%. In an anomaly detection algorithm, a high degree of accuracy on the sequence is desired. Our machine's hardware specifications prevent us from running programs with a lot of cycles and sequences. Nevertheless, by executing more data sequence and cycle, accuracy can be increased.
+![Image](https://github.com/user-attachments/assets/33d5c44e-d011-46b7-a28c-3027aaf81c11)
 
-On the other hand, a variety of factors come into play, such as the quantity and quality of the data, as well as the hyperparameters that are used to tune and train the model. To achieve the best results, more data should be used for training, and the hyperparameters should be further adjusted to find the most ideal setting for training. Due to scheduling and processing limitations, we used fewer numerical sequences as data to illustrate our sample project, but this might be changed if we made greater use of resources, such as the cloud.
+The accuracy rate ranges from 50% to 70%. In anomaly detection algorithms, higher accuracy is preferred. However, hardware limitations restrict us from running programs with extensive cycles and sequences. Increasing the number of data sequences and cycles could improve accuracy.
+
+Accuracy also depends on factors such as data quantity, data quality, and hyperparameter tuning. To achieve optimal results, more training data should be used, and hyperparameters should be further refined. Due to scheduling and processing constraints, we used a limited number of numerical sequences for this sample project. Expanding resources, such as leveraging cloud computing, could help enhance performance.
