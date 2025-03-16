@@ -56,16 +56,13 @@ We have uploaded the anomaly results of our data in this repository for referenc
 Work process flow chart:
 
 ```mermaid
-graph TD;
-    A["🚀 1. Start Project"] --> B["📂 2. Read JSON Data & Extract Sequences"];
-    B --> C["🔄 3. Process & Structure Data"];
-    C --> D["🧠 4. Prepare HTM Input"];
-    D --> E["📖 5. Train Model"];
-    E --> F["📈 6. Identify Patterns"];
-    F --> G["⚠️ 7. Detect Anomalies"];
-    G --> H["📊 8. Store & Display Output"];
+graph LR;
+    Start["🚀 Start Project"] --> |📂 Read JSON Data| ExtractSequences["📊 Extract Sequences"];
+    ExtractSequences --> |🔄 Process & Structure Data| ConvertSequences["🔁 Convert Sequences"];
+    ConvertSequences --> |🧠 Prepare HTM Input| TrainModel["📖 Train Model"];
+    TrainModel --> |📈 Identify Patterns| AnomalyDetection["⚠️ Anomaly Detection"];
+    AnomalyDetection --> |💾 Save Results & Generate Graph| StoreOutput["📊 Store Output"];
 ```
-
 
 1. **Start Project**
     - Begin the project execution.
@@ -247,11 +244,11 @@ foreach (var sequenceKeyPair in sequences){
  
 ## Results
 
-The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
+We have used around 20 sequences to learn the model. The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
 
 Output result files: [Link](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output)
 
-We have used around 20 sequences to learn the model. The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
+We trained the model using 20 sequences and evaluated its accuracy in detecting anomalies within the test sequences provided below.
 
 | Index |       Testing Sequence           | Learned Sequences | Tolerance Value | Avg. Accuracy |
 |-------|----------------------------------|-------------------|-----------------|---------------|
