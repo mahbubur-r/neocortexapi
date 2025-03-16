@@ -20,7 +20,7 @@ namespace AnomalyDetectionSample
         /// <summary>
         /// Initializes a new instance of HTMAnomalyDetector with default folder paths.
         /// </summary>
-        public HTMAnomalyDetector(string trainingFolderPath = "anomaly_training", string testingFolderPath = "anomaly_testing")
+        public HTMAnomalyDetector(string trainingFolderPath = "anomaly_training", string testingFolderPath = "anomaly_predicting")
         {
             string baseDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName;
             _trainingDataPath = Path.Combine(baseDirectory, trainingFolderPath);
@@ -41,10 +41,11 @@ namespace AnomalyDetectionSample
             var testSequences = LoadTestSequences(_testingDataPath);
             string outputFilePath = PrepareOutputFile();
 
-            List<string> results = DetectAnomalies(trainedPredictor, testSequences);
+            var (alldata, anomalydices, results) = DetectAnomalies(trainedPredictor, testSequences);
             SaveResultsToFile(results, outputFilePath);
 
             StoredOutputValues.totalAvgAccuracy = _cumulativeAccuracy / _sequenceCount;
+            AnomalyVisualizer.CreateGraphForAnomalies(allData, allAnomalyIndices);
             Console.WriteLine("Anomaly detection experiment completed. Results saved to file.");
         }
 
@@ -69,36 +70,51 @@ namespace AnomalyDetectionSample
             return Path.Combine(outputFolder, outputFile);
         }
 
+        List<double[]> allData = new List<double[]>();
+        List<List<int>> allAnomalyIndices = new List<List<int>>();
+
         /// <summary>
         /// Detects anomalies in all test sequences and returns the results.
         /// </summary>
-        private List<string> DetectAnomalies(Predictor predictor, List<List<double>> sequences)
+        private Tuple<List<double[]>, List<List<int>>, List<string>>  DetectAnomalies(Predictor predictor, List<List<double>> sequences)
         {
             var allResults = new List<string>();
 
             foreach (var sequence in sequences)
             {
+                allData.Add(sequence.ToArray());
+
                 try
                 {
-                    allResults.AddRange(ProcessSequence(predictor, sequence.ToArray()));
+                    var (log, anomalies) = ProcessSequence(predictor, sequence.ToArray());
+                    allResults.AddRange(log);
+                    allAnomalyIndices.Add(anomalies);
                 }
                 catch (ArgumentException ex)
                 {
                     Console.WriteLine($"Sequence skipped due to error: {ex.Message}");
                 }
             }
-            return allResults;
+
+            return Tuple.Create(allData, allAnomalyIndices, allResults);
         }
 
         /// <summary>
         /// Processes a single sequence and detects anomalies based on predictions.
         /// </summary>
-        private List<string> ProcessSequence(Predictor predictor, double[] sequence)
+        private Tuple<List<string>, List<int>> ProcessSequence(Predictor predictor, double[] sequence)
         {
             ValidateSequence(sequence);
-            var resultLines = new List<string> { "------------------------------", $"Testing sequence: {string.Join(", ", sequence)}", "------------------------------" };
+            var resultLines = new List<string>
+            {
+                "------------------------------",
+                $"Testing sequence: {string.Join(", ", sequence)}",
+                "------------------------------"
+            };
 
+            var anomalousIndex = new List<int>();
             double sequenceAccuracy = 0.0;
+
             for (int i = 0; i < sequence.Length - 1; i++)
             {
                 var predictionResult = predictor.Predict(sequence[i]);
@@ -112,9 +128,15 @@ namespace AnomalyDetectionSample
                 double similarity = predictionResult.First().Similarity;
                 bool isAnomalous = IsAnomaly(predictedValue, sequence[i + 1]);
 
-                resultLines.Add(isAnomalous
-                    ? $"Anomaly detected: Predicted {predictedValue}, Actual {sequence[i + 1]}, Similarity {similarity}%"
-                    : $"No anomaly: Predicted {predictedValue}, Actual {sequence[i + 1]}, Similarity {similarity}%");
+                if (isAnomalous)
+                {
+                    anomalousIndex.Add((int)(i + 1)); // Store the actual value as an int
+                    resultLines.Add($"Anomaly detected: Predicted {predictedValue}, Actual {sequence[i + 1]}, Similarity {similarity}%");
+                }
+                else
+                {
+                    resultLines.Add($"No anomaly: Predicted {predictedValue}, Actual {sequence[i + 1]}, Similarity {similarity}%");
+                }
 
                 sequenceAccuracy += similarity;
             }
@@ -125,7 +147,8 @@ namespace AnomalyDetectionSample
 
             resultLines.Add($"Average accuracy: {avgAccuracy}%");
             resultLines.Add("------------------------------");
-            return resultLines;
+
+            return Tuple.Create(resultLines, anomalousIndex);
         }
 
         /// <summary>

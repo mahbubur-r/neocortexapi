@@ -1,0 +1,115 @@
+------------------------------
+Testing sequence: 68, 92, 65, 66, 70, 69, 65
+------------------------------
+Anomaly detected: Predicted 72, Actual 92, Similarity 41.67%
+Prediction failed.
+Prediction failed.
+No anomaly: Predicted 70, Actual 70, Similarity 37.5%
+No anomaly: Predicted 67, Actual 69, Similarity 12.5%
+Anomaly detected: Predicted 72, Actual 65, Similarity 20.83%
+Average accuracy: 18.75%
+------------------------------
+------------------------------
+Testing sequence: 68, 72, 65, 66, 30, 69, 35
+------------------------------
+No anomaly: Predicted 72, Actual 72, Similarity 16.67%
+No anomaly: Predicted 67, Actual 65, Similarity 62.5%
+Prediction failed.
+Anomaly detected: Predicted 70, Actual 30, Similarity 37.5%
+Prediction failed.
+Anomaly detected: Predicted 72, Actual 35, Similarity 62.5%
+Average accuracy: 29.861666666666668%
+------------------------------
+------------------------------
+Testing sequence: 71, 72, 65, 36, 70, 69, 65
+------------------------------
+Prediction failed.
+No anomaly: Predicted 67, Actual 65, Similarity 62.5%
+Prediction failed.
+Prediction failed.
+No anomaly: Predicted 72, Actual 69, Similarity 70.83%
+Prediction failed.
+Average accuracy: 22.221666666666664%
+------------------------------
+------------------------------
+Testing sequence: 71, 72, 65, 66, 70, 98, 95
+------------------------------
+No anomaly: Predicted 72, Actual 72, Similarity 29.17%
+No anomaly: Predicted 67, Actual 65, Similarity 50%
+Prediction failed.
+No anomaly: Predicted 70, Actual 70, Similarity 37.5%
+Anomaly detected: Predicted 67, Actual 98, Similarity 12.5%
+Prediction failed.
+Average accuracy: 21.528333333333336%
+------------------------------
+------------------------------
+Testing sequence: 72, 75, 68, 72, 67, 66, 99, 72, 67
+------------------------------
+Anomaly detected: Predicted 67, Actual 75, Similarity 62.5%
+No anomaly: Predicted 68, Actual 68, Similarity 41.67%
+No anomaly: Predicted 72, Actual 72, Similarity 25%
+No anomaly: Predicted 67, Actual 67, Similarity 41.67%
+No anomaly: Predicted 66, Actual 66, Similarity 16.67%
+Anomaly detected: Predicted 70, Actual 99, Similarity 20.83%
+Prediction failed.
+No anomaly: Predicted 67, Actual 67, Similarity 62.5%
+Average accuracy: 33.855000000000004%
+------------------------------
+------------------------------
+Testing sequence: 72, 67, 66, 90, 69, 97
+------------------------------
+No anomaly: Predicted 67, Actual 67, Similarity 8.33%
+No anomaly: Predicted 70, Actual 66, Similarity 37.5%
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 72, Actual 97, Similarity 62.5%
+Average accuracy: 21.666%
+------------------------------
+------------------------------
+Testing sequence: 74, 75, 68, 72, 67, 66, 92, 68, 100
+------------------------------
+Prediction failed.
+No anomaly: Predicted 68, Actual 68, Similarity 83.33%
+Prediction failed.
+No anomaly: Predicted 67, Actual 67, Similarity 62.5%
+No anomaly: Predicted 66, Actual 66, Similarity 12.5%
+Anomaly detected: Predicted 70, Actual 92, Similarity 20.83%
+Prediction failed.
+Anomaly detected: Predicted 72, Actual 100, Similarity 41.67%
+Average accuracy: 27.603749999999998%
+------------------------------
+------------------------------
+Testing sequence: 68, 72, 67, 66, 10, 68, 85
+------------------------------
+No anomaly: Predicted 72, Actual 72, Similarity 8.33%
+No anomaly: Predicted 67, Actual 67, Similarity 62.5%
+No anomaly: Predicted 66, Actual 66, Similarity 12.5%
+Anomaly detected: Predicted 70, Actual 10, Similarity 20.83%
+Prediction failed.
+Anomaly detected: Predicted 72, Actual 85, Similarity 41.67%
+Average accuracy: 24.304999999999996%
+------------------------------
+------------------------------
+Testing sequence: 75, 68, 72, 67, 16, 50, 69, 65
+------------------------------
+No anomaly: Predicted 68, Actual 68, Similarity 41.67%
+No anomaly: Predicted 72, Actual 72, Similarity 25%
+No anomaly: Predicted 67, Actual 67, Similarity 41.67%
+Anomaly detected: Predicted 66, Actual 16, Similarity 16.67%
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 72, Actual 65, Similarity 62.5%
+Average accuracy: 26.787142857142857%
+------------------------------
+------------------------------
+Testing sequence: 75, 68, 72, 97, 66, 70, 69, 85
+------------------------------
+No anomaly: Predicted 68, Actual 68, Similarity 41.67%
+No anomaly: Predicted 72, Actual 72, Similarity 25%
+Anomaly detected: Predicted 67, Actual 97, Similarity 41.67%
+Prediction failed.
+No anomaly: Predicted 70, Actual 70, Similarity 37.5%
+No anomaly: Predicted 67, Actual 69, Similarity 12.5%
+Anomaly detected: Predicted 72, Actual 85, Similarity 20.83%
+Average accuracy: 25.595714285714287%
+------------------------------

@@ -1,0 +1,220 @@
+------------------------------
+Testing sequence: 7, 7, 5, 13, 11, 7, 9, 9
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 9, Similarity 12.5%
+Average accuracy: 1.7857142857142858%
+------------------------------
+------------------------------
+Testing sequence: 9, 5, 12, 10, 10, 10, 15, 12, 17, 14
+------------------------------
+Anomaly detected: Predicted 8, Actual 5, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 10, Similarity 12.5%
+Anomaly detected: Predicted 8, Actual 10, Similarity 12.5%
+Anomaly detected: Predicted 8, Actual 15, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Average accuracy: 5.555555555555555%
+------------------------------
+------------------------------
+Testing sequence: 11, 11, 7, 7, 12, 6, 12, 6, 12
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Average accuracy: 0%
+------------------------------
+------------------------------
+Testing sequence: 12, 11, 8, 8, 10, 11, 5, 3, 8, 7
+------------------------------
+Prediction failed.
+Prediction failed.
+No anomaly: Predicted 8, Actual 8, Similarity 12.5%
+Anomaly detected: Predicted 8, Actual 10, Similarity 12.5%
+Anomaly detected: Predicted 8, Actual 11, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 7, Similarity 12.5%
+Average accuracy: 5.555555555555555%
+------------------------------
+------------------------------
+Testing sequence: 6, 32, 17, 19, 16, 14, 9, 5, 7
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 5, Similarity 12.5%
+Prediction failed.
+Average accuracy: 1.5625%
+------------------------------
+------------------------------
+Testing sequence: 17, 12, 8, 15, 15, 1, 11, 5, 8, 13
+------------------------------
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 15, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 13, Similarity 12.5%
+Average accuracy: 2.7777777777777777%
+------------------------------
+------------------------------
+Testing sequence: 8, 1, 8, 12, 8, 5, 15, 6, 9, 10, 20
+------------------------------
+Anomaly detected: Predicted 8, Actual 1, Similarity 12.5%
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 12, Similarity 12.5%
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 5, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 10, Similarity 12.5%
+Anomaly detected: Predicted 8, Actual 20, Similarity 12.5%
+Average accuracy: 6.25%
+------------------------------
+------------------------------
+Testing sequence: 17, 7, 24, 5, 10, 11, 9, 14, 6
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 11, Similarity 12.5%
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 14, Similarity 12.5%
+Prediction failed.
+Average accuracy: 3.125%
+------------------------------
+------------------------------
+Testing sequence: 20, 8, 4, 7, 10, 6, 7, 18, 21, 21, 70
+------------------------------
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 4, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 6, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Average accuracy: 2.5%
+------------------------------
+------------------------------
+Testing sequence: 9, 21, 13, 11, 13, 11, 5, 6, 10, 14
+------------------------------
+Anomaly detected: Predicted 8, Actual 21, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 14, Similarity 12.5%
+Average accuracy: 2.7777777777777777%
+------------------------------
+------------------------------
+Testing sequence: 10, 13, 11, 6, 14, 10, 15, 9, 11, 22
+------------------------------
+Anomaly detected: Predicted 8, Actual 13, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 15, Similarity 12.5%
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 11, Similarity 12.5%
+Prediction failed.
+Average accuracy: 4.166666666666667%
+------------------------------
+------------------------------
+Testing sequence: 22, 9, 13, 11, 12, 8, 12, 17, 22
+------------------------------
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 13, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Anomaly detected: Predicted 8, Actual 12, Similarity 12.5%
+Prediction failed.
+Prediction failed.
+Average accuracy: 3.125%
+------------------------------
+------------------------------
+Testing sequence: 19, 13, 15, 18, 31, 25, 29, 29, 35
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Average accuracy: 0%
+------------------------------
+------------------------------
+Testing sequence: 28, 22, 19, 23, 16, 17, 18, 40, 28, 29, 35
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Average accuracy: 0%
+------------------------------
+------------------------------
+Testing sequence: 23, 19, 13, 17, 19, 23, 20, 25, 35
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Average accuracy: 0%
+------------------------------
+------------------------------
+Testing sequence: 66, 72, 52, 40, 42, 39, 32, 28, 36, 37, 30
+------------------------------
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Prediction failed.
+Average accuracy: 0%
+------------------------------
