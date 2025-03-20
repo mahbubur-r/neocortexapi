@@ -175,9 +175,12 @@ namespace AnomalyDetectionSample
         {
             return Math.Abs(predicted - actual) / actual > _tolerance;
         }
+        /// <summary>
+        /// Saves experiment results to a text file.
+        /// </summary>
         private void SaveResultsToFile(List<string> results, string filePath)
         {
-            File.WriteAllLines();
+            File.WriteAllLines(filePath, results);
         }
     }
 }
