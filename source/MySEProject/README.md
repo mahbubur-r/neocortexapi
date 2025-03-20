@@ -56,6 +56,7 @@ We have uploaded the anomaly results of our data in this repository for referenc
 Work process flow chart:
 
 ```mermaid
+
 graph LR;
     Start["🚀 Start Project"] --> |📂 Read JSON Data| ExtractSequences["📊 Extract Sequences"];
     ExtractSequences --> |🔄 Process & Structure Data| ConvertSequences["🔁 Convert Sequences"];
@@ -86,7 +87,6 @@ graph LR;
 
 The following is how our project is carried out.
  
-
 * In the beginning, we have ExtractSequencesFromFolder method of [CsvSequenceFolder](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/CsvSequenceFolder.cs) class to read all the files placed inside a folder. These classes keep track of the read sequences in a list of numerical sequences that will be used repeatedly in the future. To handle non-numeric data, some classes have incorporated exception handling inside. With the Trimsequences technique, data can be trimmed. It returns a numeric sequence after trimming one to four components (numbers 1 through 4) from the start.
 
 ```csharp
@@ -102,7 +102,6 @@ public static List<List<double>> TrimSequences(List<List<double>> sequences)
           return trimmedSequences;
         }
 ```
-
 * After that, the method ConvertToHTMInput of [CSVToHTMInputConverter](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/CSVToHTMInputConverter.cs) class is there which converts all the read sequences to a format suitable for HTM training.
 
 ```csharp
@@ -194,7 +193,6 @@ To run this project, use the following class/methods given in [Program.cs].
 HTMAnomalyExperiment tester = new HTMAnomalyExperiment();
 tester.ExecuteExperiment();
 ```
-
 ### HTM Engine Settings:
 
 It is crucial that our input data be encoded so that our HTM Engine can process it. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/Encoders.md). 
