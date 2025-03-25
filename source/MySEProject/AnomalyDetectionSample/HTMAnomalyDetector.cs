@@ -15,8 +15,8 @@ namespace AnomalyDetectionSample
         private readonly string _testingDataPath;
         private static double _cumulativeAccuracy = 0.0;
         private static int _sequenceCount = 0;
-        private readonly double _tolerance = 0.1;
-
+        private readonly double _tolerance = 0.2;
+        List<double[]> allLearnedData = new List<double[]>();
         /// <summary>
         /// Initializes a new instance of HTMAnomalyDetector with default folder paths.
         /// </summary>
@@ -35,17 +35,26 @@ namespace AnomalyDetectionSample
             var htmTrainer = new HTMTrainingService();
             htmTrainer.TrainModelWithHTM(_trainingDataPath, _testingDataPath, out Predictor trainedPredictor);
 
+            CsvSequenceFolder trainingReader = new CsvSequenceFolder(_trainingDataPath);
+            var inputSequences = trainingReader.ExtractSequencesFromFolder();
+
+            foreach (var sequence in inputSequences)
+            {
+                allLearnedData.Add(sequence.ToArray());
+            }
+
             Console.WriteLine("\nStarting anomaly detection experiment...\n");
             trainedPredictor.Reset();
 
             var testSequences = LoadTestSequences(_testingDataPath);
             string outputFilePath = PrepareOutputFile();
 
-            var (alldata, anomalydices, results) = DetectAnomalies(trainedPredictor, testSequences);
+            var (allTestingData, allAnomalyIndices, results) = DetectAnomalies(trainedPredictor, testSequences);
             SaveResultsToFile(results, outputFilePath);
 
             StoredOutputValues.totalAvgAccuracy = _cumulativeAccuracy / _sequenceCount;
-            AnomalyVisualizer.CreateGraphForAnomalies(allData, allAnomalyIndices);
+            AnomalyGraphs.CompareGraphForSequences(allLearnedData, allTestingData);
+            AnomalyGraphs.CompareBothSequenceWithAnomalies(allLearnedData, allTestingData, allAnomalyIndices);
             Console.WriteLine("Anomaly detection experiment completed. Results saved to file.");
         }
 
@@ -70,7 +79,7 @@ namespace AnomalyDetectionSample
             return Path.Combine(outputFolder, outputFile);
         }
 
-        List<double[]> allData = new List<double[]>();
+        List<double[]> allTestingData = new List<double[]>();
         List<List<int>> allAnomalyIndices = new List<List<int>>();
 
         /// <summary>
@@ -82,7 +91,7 @@ namespace AnomalyDetectionSample
 
             foreach (var sequence in sequences)
             {
-                allData.Add(sequence.ToArray());
+                allTestingData.Add(sequence.ToArray());
 
                 try
                 {
@@ -96,7 +105,7 @@ namespace AnomalyDetectionSample
                 }
             }
 
-            return Tuple.Create(allData, allAnomalyIndices, allResults);
+            return Tuple.Create(allTestingData, allAnomalyIndices, allResults);
         }
 
         /// <summary>
