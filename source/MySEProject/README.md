@@ -166,7 +166,7 @@ We will then use this to detect anomalies.
 
 * Now, when we traverse the list one by one to the right, we pass the value to the predictor to get the next value and compare the prediction with the actual value. If there's anomaly, then it is outputted to the user, and the anomalous element is skipped. Upon reaching to the last element, we can end our traversal and move on to next list.
 
-We use anomalyscore (difference ratio) for comparison with our already preset threshold. When it exceeds, probable anomalies are found.
+We use anomalyscore (difference ratio) for comparison with our already preset threshold. When it exceeds, probable anomalies are found. [Code](https://github.com/mahbubur-r/neocortexapi/blob/46d0e63232643ce6e1758bb77fa0e73894f3fafd/source/MySEProject/AnomalyDetectionSample/HTMAnomalyDetector.cs#L127-L152)
 
 To run this project, use the following class/methods given in [Program.cs].
 
