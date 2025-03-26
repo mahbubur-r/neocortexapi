@@ -53,40 +53,29 @@ We have uploaded the anomaly results of our data in this repository for referenc
 
 1. output result of combined numerical sequence data from training folder (without anomalies) and predicting folder (with anomalies) can be found [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output).
 
-Work process flow chart:
+## Work process flow chart:
 
 ```mermaid
-
 graph LR;
     Start["🚀 Start Project"] --> |📂 Read JSON Data| ExtractSequences["📊 Extract Sequences"];
     ExtractSequences --> |🔄 Process & Structure Data| ConvertSequences["🔁 Convert Sequences"];
     ConvertSequences --> |🧠 Prepare HTM Input| TrainModel["📖 Train Model"];
+
     TrainModel --> |📈 Identify Patterns| AnomalyDetection["⚠️ Anomaly Detection"];
     AnomalyDetection --> |💾 Save Results & Generate Graph| StoreOutput["📊 Store Output"];
+
+    style Start fill:#f8d7da,stroke:#721c24,stroke-width:2px;
+    style ExtractSequences fill:#d1ecf1,stroke:#0c5460,stroke-width:2px;
+    style ConvertSequences fill:#d4edda,stroke:#155724,stroke-width:2px;
+    style TrainModel fill:#fefefe,stroke:#343a40,stroke-width:2px;
+    style AnomalyDetection fill:#fff3cd,stroke:#856404,stroke-width:2px;
+    style StoreOutput fill:#cce5ff,stroke:#004085,stroke-width:2px;
 ```
-
-1. **Start Project**
-    - Begin the project execution.
-
-2. **Extract Sequences From Folder**
-    - Extract sequences from the designated folder for further processing.
-
-3. **Convert Sequences for HTM Training**
-    - Convert the extracted sequences into a format suitable for Hierarchical Temporal Memory (HTM) training.
-
-4. **Train Model for Converted Sequences**
-    - Train the HTM model using the converted sequences.
-
-5. **Anomaly Detection Based on Predicting Folder Sequence**
-    - Perform anomaly detection based on the sequences from the predicting folder.
-
-6. **Store Anomaly Output in Text File**
-    - Store the output of anomaly detection in a text file for further analysis or reporting purposes.
-
 ## Execution of the project
 
 The following is how our project is carried out.
  
+
 * In the beginning, we have ExtractSequencesFromFolder method of [CsvSequenceFolder](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/CsvSequenceFolder.cs) class to read all the files placed inside a folder. These classes keep track of the read sequences in a list of numerical sequences that will be used repeatedly in the future. To handle non-numeric data, some classes have incorporated exception handling inside. With the Trimsequences technique, data can be trimmed. It returns a numeric sequence after trimming one to four components (numbers 1 through 4) from the start.
 
 ```csharp
@@ -102,6 +91,7 @@ public static List<List<double>> TrimSequences(List<List<double>> sequences)
           return trimmedSequences;
         }
 ```
+
 * After that, the method ConvertToHTMInput of [CSVToHTMInputConverter](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/CSVToHTMInputConverter.cs) class is there which converts all the read sequences to a format suitable for HTM training.
 
 ```csharp
@@ -130,9 +120,9 @@ combinedSequences.AddRange(sequences2);
 
 ```csharp
 .....
-CsvSequenceFolder testSequencesReader = new CsvSequenceFolder(_predictingCSVFolderPath);
-var inputSequences = testSequencesReader.ExtractSequencesFromFolder();
-var trimmedInputSequences = CsvSequenceFolder.TrimSequences(inputSequences);
+var testSequences = LoadTestSequences(_testingDataPath);
+string outputFilePath = PrepareOutputFile();
+var (allTestingData, allAnomalyIndices, results) = DetectAnomalies(trainedPredictor, testSequences);
 .....
 ```
 Path to training and predicting folder is set as default and passed on the constructor, or can be set inside the class manually.
@@ -156,19 +146,10 @@ Exception handling is present, such that errors thrown from DetectAnomaly method
 
 [DetectAnomaly](https://github.com/mahbubur-r/neocortexapi/blob/98ae630c79221e9d7a792282c5faabc08a2b794f/source/MySEProject/AnomalyDetectionSample/HTMAnomalyExperiment.cs#L105) is the main method from ExtractSequencesFromFolder class which detects anomalies in our data. It traverses each value of a list one by one in a sliding window manner, and uses trained model predictor to predict the next element for comparison. We use an anomalyscore to quantify the comparison and detect anomalies; if the prediction crosses a certain tolerance level, it is declared as an anomaly.
 
-In our sliding window approach, naturally the first element is skipped, so we ensure that the first element is checked for anomaly in the beginning.
-
 We can get our prediction in a list of results in format of "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]" from our trained model Predictor using the following:
 
 ```csharp
 var res = predictor.Predict(item);
-```
-Here, assume that item passed to the model is of int type with value 8. We can use this to analyze how prediction works. When this is executed,
-```csharp
-foreach (var pred in res)
- {
-   Console.WriteLine($"{pred.PredictedInput} - {pred.Similarity}");
-    }
 ```
 We get the following output.
 ```
@@ -193,6 +174,7 @@ To run this project, use the following class/methods given in [Program.cs].
 HTMAnomalyExperiment tester = new HTMAnomalyExperiment();
 tester.ExecuteExperiment();
 ```
+
 ### HTM Engine Settings:
 
 It is crucial that our input data be encoded so that our HTM Engine can process it. More on [this](https://github.com/ddobric/neocortexapi/blob/master/source/Documentation/Encoders.md). 
@@ -242,7 +224,7 @@ foreach (var sequenceKeyPair in sequences){
  
 ## Results
 
-We have used around 20 sequences to learn the model. The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
+We have used multiple sequences to learn the model based on the predicting power consumptions with HTM [probablymarcus.com](https://probablymarcus.com/gorilla/?path=hotgym.clj). The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
 
 Output result files: [Link](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output)
 
@@ -250,20 +232,30 @@ We trained the model using 20 sequences and evaluated its accuracy in detecting 
 
 | Index |       Testing Sequence           | Learned Sequences | Tolerance Value | Avg. Accuracy |
 |-------|----------------------------------|-------------------|-----------------|---------------|
-| 1     | {71,74,98,68,92,65,66,70,69,65}  | 20                | 0.2             | 28.77 %       |
-| 2     | {71,74,75,68,72,65,66,30,69,35}  | 20                | 0.2             | 25.67 %       |
-| 3     | {71,74,75,71,72,65,36,70,69,65}  | 20                | 0.2             | 16.02 %       |
-| 4     | {71,75,75,71,72,65,66,70,98,95}  | 20                | 0.2             | 35.12 %       |
-| 5     | {69,72,75,68,72,67,66,99,72,67}  | 20                | 0.2             | 41.90 %       |
-| 6     | {69,72,75,68,72,67,66,90,69,97}  | 20                | 0.2             | 63.19 %       |
-| 7     | {69,74,75,68,72,67,66,92,68,100} | 20                | 0.2             | 41.86 %       |
-| 8     | {69,74,75,68,72,67,66,10,68,85}  | 20                | 0.2             | 50.10 %       |
-| 9     | {68,74,75,68,72,67,16,50,69,65}  | 20                | 0.2             | 39.29 %       |
-| 10    | {71,74,75,68,72,97,66,70,69,85}  | 20                | 0.2             | 33.45 %       |
+| 1     | {71,74,98,68,92,65,66,70,69,65}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)               | 0.2             | 28.77 %       |
+| 2     | {71,74,75,68,72,65,66,30,69,35}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 25.67 %       |
+| 3     | {71,74,75,71,72,65,36,70,69,65}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 16.02 %       |
+| 4     | {71,75,75,71,72,65,66,70,98,95}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 35.12 %       |
+| 5     | {69,72,75,68,72,67,66,99,72,67}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 41.90 %       |
+| 6     | {69,72,75,68,72,67,66,90,69,97}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 63.19 %       |
+| 7     | {69,74,75,68,72,67,66,92,68,100} | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 41.86 %       |
+| 8     | {69,74,75,68,72,67,66,10,68,85}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 50.10 %       |
+| 9     | {68,74,75,68,72,67,16,50,69,65}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 39.29 %       |
+| 10    | {71,74,75,68,72,97,66,70,69,85}  | [Sequence](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/anomaly_training)                | 0.2             | 33.45 %       |
 
 Upon completion of the experiment, the anomaly detection results are displayed on the screen, along with the HTM accuracy for each individual number sequence and the overall HTM accuracy for the entire experiment. Once the experiment is finished, a plotted graph automatically opens in the default browser, highlighting anomalies in the numerical sequence data from the predicting folder with red dots.
 
-![Image](https://github.com/user-attachments/assets/33d5c44e-d011-46b7-a28c-3027aaf81c11)
+## Graphical Result
+
+We implemented in our code to grpahically view the the learned sequence and testing sequence with anomaly using plots. Functionality can be found in [AnomalyGraphs](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/AnomalyGraphs.cs).
+All the output result plots can be found in html format [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/result/plots)
+
+We generated 2 kinds of plots
+1. Actual and Predicting sequence
+2. Actual and Predicting sequence with anomalies
+
+In below picture, Actual and Predicting sequence with anomalies can be viewed
+![Image](https://github.com/user-attachments/assets/c15caed8-5212-4324-991a-0cb6270b3e07)
 
 The accuracy rate ranges from 50% to 70%. In anomaly detection algorithms, higher accuracy is preferred. However, hardware limitations restrict us from running programs with extensive cycles and sequences. Increasing the number of data sequences and cycles could improve accuracy.
 
