@@ -221,10 +221,34 @@ foreach (var sequenceKeyPair in sequences){
 ```
 * The HTM classifier and trained cortical layer are finally returned. More [here](https://github.com/mahbubur-r/neocortexapi/blob/0da3d6b9ac2e654e80b4bab9a84ad2e26f887028/source/MySEProject/AnomalyDetectionSample/multisequencelearning.cs#L298)
 
- 
+The AnomalyGraphs [class](https://github.com/mahbubur-r/neocortexapi/blob/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/AnomalyGraphs.cs) is used to plot graphs of sequences of data and their anomalies. The class contains one static method, PlotGraphWithAnomalies, which takes three parameters: a list of arrays of doubles, where each array represents a sequence of data, and allAnomalyIndices: a list of lists of integers, where each list represents the indices of the anomalies in a sequence.
+
+````csharp
+public static void CompareGraphForSequences(List<double[]> allLearnedData, List<double[]> allTestingData)
+````
+The method works by creating a line graph for both training and learning sequences and a scatter plot for its anomalies. It then combines all the graphs into a chart and displays it. This method uses the XPlot.Plotly library to create the graphs and the chart.
+
+A Scatter object graph is created for the sequence. The x-values are the indices of the data points, and the y-values are the data points themselves. The graph is a line graph and is named "Sequence" followed by the index of the sequence.
+
+````csharp
+var graph = new Scatter
+{
+    x = Enumerable.Range(0, data.Length).ToArray(),
+    y = data,
+    mode = "lines",
+    name = "Sequence" + i
+};
+````
+A Chart object chart is created by plotting all the graphs in allGraphs and allAnomalies. Finally, we saved the chat in html format [here](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/result/plots) and also chart is displayed.
+
+````csharp
+var chart = Chart.Plot(allGraphs.Concat(allAnomalies));         
+File.WriteAllText(filePath, chart.GetHtml());
+chart.Show();
+```` 
 ## Results
 
-We have used multiple sequences to learn the model based on the predicting power consumptions with HTM [probablymarcus.com](https://probablymarcus.com/gorilla/?path=hotgym.clj). The test sequences exhibit a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
+After the experiment ends, the anomaly detection results are displayed on the screen, along with the HTM accuracy for each individual number sequence and the overall HTM accuracy for the entire experiment. The test sequences we used follows a pattern where values increase to a peak and then decrease symmetrically, which is characteristic of a sine wave.
 
 Output result files: [Link](https://github.com/mahbubur-r/neocortexapi/tree/Team_Anomaly_Detection/source/MySEProject/AnomalyDetectionSample/output)
 
@@ -257,6 +281,6 @@ We generated 2 kinds of plots
 In below picture, Actual and Predicting sequence with anomalies can be viewed
 ![Image](https://github.com/user-attachments/assets/c15caed8-5212-4324-991a-0cb6270b3e07)
 
-The accuracy rate ranges from 50% to 70%. In anomaly detection algorithms, higher accuracy is preferred. However, hardware limitations restrict us from running programs with extensive cycles and sequences. Increasing the number of data sequences and cycles could improve accuracy.
+The accuracy rate ranges from 20% to 70%. In anomaly detection algorithms, higher accuracy is preferred. However, hardware limitations restrict us from running programs with extensive cycles and sequences. Increasing the number of data sequences and cycles could improve accuracy.
 
 Accuracy also depends on factors such as data quantity, data quality, and hyperparameter tuning. To achieve optimal results, more training data should be used, and hyperparameters should be further refined. Due to scheduling and processing constraints, we used a limited number of numerical sequences for this sample project. Expanding resources, such as leveraging cloud computing, could help enhance performance.
