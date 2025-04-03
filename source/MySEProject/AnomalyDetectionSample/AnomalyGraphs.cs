@@ -4,7 +4,12 @@ namespace AnomalyDetectionSample
 {
     public class AnomalyGraphs
     {
-        // Method to compare and plot actual and learned data sequences for testing and training data
+        /// <summary>
+        /// Compares and visualizes actual (testing) and learned (predicted) sequences using line plots.
+        /// The method generates an interactive HTML file and also displays the plot in a browser.
+        /// </summary>
+        /// <param name="allLearnedData">List of predicted sequences.</param>
+        /// <param name="allTestingData">List of actual testing sequences.</param>
         public static void CompareGraphForSequences(List<double[]> allLearnedData, List<double[]> allTestingData)
         {
             // List to hold all the graph data (both actual and learned sequences)
@@ -64,7 +69,14 @@ namespace AnomalyDetectionSample
             chart.Show();
         }
 
-        // Method to compare actual, learned sequences, and anomalies
+        /// <summary>
+        /// Compares actual (testing) sequences, learned (predicted) sequences, and detected anomalies.
+        /// The anomalies are marked separately in red, making it easier to visualize abnormal points.
+        /// The method generates an interactive HTML file and also displays the plot in a browser.
+        /// </summary>
+        /// <param name="allLearnedData">List of predicted sequences.</param>
+        /// <param name="allTestingData">List of actual testing sequences.</param>
+        /// <param name="allAnomalyIndices">List of indices marking detected anomalies for each sequence.</param>
         public static void CompareBothSequenceWithAnomalies(List<double[]> allLearnedData, List<double[]> allTestingData, List<List<int>> allAnomalyIndices)
         {
             // List to hold graphs for actual and learned sequences

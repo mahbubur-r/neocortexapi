@@ -69,8 +69,15 @@ namespace AnomalyDetectionSample
         }
 
         /// <summary>
-        /// Multisequence learning experiment started
+        /// Runs an experiment to train a Temporal Memory (TM) model using input sequences and the given configuration.
+        /// The method initializes various HTM components (Spatial Pooler, Temporal Memory, Homeostatic Plasticity Controller),
+        /// and trains the model on the given sequences while tracking performance metrics.
         /// </summary>
+        /// <param name="inputBits">The number of input bits for encoding the sequences.</param>
+        /// <param name="cfg">Configuration object containing the parameters for the HTM model.</param>
+        /// <param name="encoder">The encoder used to convert the input data into a suitable format for the HTM model.</param>
+        /// <param name="sequences">A dictionary where each key is a sequence identifier and each value is a list of numerical input values.</param>
+        /// <returns>A trained Predictor object that can be used for future predictions.</returns>
         private Predictor RunExperiment(int inputBits, HtmConfig cfg, EncoderBase encoder, Dictionary<string, List<double>> sequences)
         {
             Stopwatch sw = new Stopwatch();

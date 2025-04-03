@@ -41,6 +41,14 @@ namespace AnomalyDetectionSample
             Console.WriteLine("------------------------------");
         }
 
+        /// <summary>
+        /// Trains an HTM (Hierarchical Temporal Memory) model using sequences from CSV files.
+        /// It reads data from both training and prediction folders, converts them into HTM input format,
+        /// and runs a multi-sequence learning algorithm to generate a trained predictor.
+        /// </summary>
+        /// <param name="trainingFolderPath">Path to the folder containing training data CSV files.</param>
+        /// <param name="predictionFolderPath">Path to the folder containing prediction data CSV files.</param>
+        /// <returns>Trained HTM predictor model.</returns>
         private static Predictor HTMTrainingSteps(string trainingFolderPath, string predictionFolderPath)
         {
             Predictor trainedPredictor;
